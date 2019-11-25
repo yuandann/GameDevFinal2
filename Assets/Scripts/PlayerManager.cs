@@ -12,6 +12,7 @@ public class PlayerManager : MonoBehaviour
     private int kickcombo=0;
 
     private bool canhit = true;
+    private bool face_left;
 
     private Animator PlayerAnim;
     // Start is called before the first frame update
@@ -64,13 +65,13 @@ public class PlayerManager : MonoBehaviour
             PlayerAnim.SetBool("Walking",false);
         }
         //show attack
-        if (Input.GetKey(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
             StartCombo();
             //CM.SR.color = Color.red;
             CheckHitbox();
         }
-        if (Input.GetKey(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X))
         {
             StartCombo();
             //CM.SR.color = Color.red;
