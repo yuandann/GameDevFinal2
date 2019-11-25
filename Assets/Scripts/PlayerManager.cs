@@ -7,6 +7,7 @@ public class PlayerManager : MonoBehaviour
 {
     public CharacterManager CM;
     public float Player_speed = 1;
+    private bool face_left=false;
 
     private int punchcombo = 0;
     private int kickcombo=0;
@@ -30,7 +31,7 @@ public class PlayerManager : MonoBehaviour
     {
 
 
-        CheckHitbox();
+        //CheckHitbox();
         //Debug.Log(transform.position.x +"  "+ (CM.ma.position.x - CM.ma.rect.width / 2));
         //move
         if (Input.GetKey(KeyCode.LeftArrow))
@@ -38,6 +39,7 @@ public class PlayerManager : MonoBehaviour
             if (!CM.SR.flipX)
             {
                 CM.SR.flipX = true;
+                face_left = true;
             }
             transform.Translate(Time.deltaTime * Player_speed * Vector2.left);
         }
@@ -46,6 +48,7 @@ public class PlayerManager : MonoBehaviour
             if (CM.SR.flipX)
             {
                 CM.SR.flipX = false;
+                face_left = false;
             }
             transform.Translate(Time.deltaTime * Player_speed * Vector2.right);
         }
@@ -69,13 +72,13 @@ public class PlayerManager : MonoBehaviour
         {
             StartCombo();
             //CM.SR.color = Color.red;
-            CheckHitbox();
+            CheckHitBoxAll();
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
             StartCombo();
             //CM.SR.color = Color.red;
-            CheckHitbox();
+            CheckHitBoxAll();
         }
 //        if (Input.GetKeyUp(KeyCode.Z))
 //        {
@@ -85,7 +88,7 @@ public class PlayerManager : MonoBehaviour
 
     private void StartCombo()
     {
-        if (canhit && Input.GetKeyDown(KeyCode.Z))
+        if (canhit && Input.GetKeyUp(KeyCode.Z))
         {
             punchcombo++;
             if (punchcombo == 1)
@@ -93,7 +96,7 @@ public class PlayerManager : MonoBehaviour
                 PlayerAnim.SetInteger("PunchCombo",punchcombo);
             }
         }
-        if (canhit && Input.GetKeyDown(KeyCode.X))
+        if (canhit && Input.GetKeyUp(KeyCode.X))
         {
             kickcombo++;
             if (kickcombo == 1)
@@ -188,6 +191,7 @@ public class PlayerManager : MonoBehaviour
             boxResult = Physics2D.BoxCastAll(gameObject.transform.position, new Vector2(1, 1), 0f, new Vector2(1, 0), 1f, 1 << 8);
         if (boxResult != null)
         {
+            PlayerAnim.SetBool("InCombat", true);
             //Debug.Log(boxResult.collider.name);
             //if (boxResult.collider.CompareTag("Enemy"))
             {
