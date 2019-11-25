@@ -13,7 +13,6 @@ public class PlayerManager : MonoBehaviour
     private int kickcombo=0;
 
     private bool canhit = true;
-    private bool face_left;
 
     private Animator PlayerAnim;
     // Start is called before the first frame update
