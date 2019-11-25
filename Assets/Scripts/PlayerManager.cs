@@ -87,7 +87,7 @@ public class PlayerManager : MonoBehaviour
 
     private void StartCombo()
     {
-        if (canhit && Input.GetKeyUp(KeyCode.Z))
+        if (canhit && Input.GetKeyDown(KeyCode.Z))
         {
             punchcombo++;
             if (punchcombo == 1)
@@ -95,7 +95,7 @@ public class PlayerManager : MonoBehaviour
                 PlayerAnim.SetInteger("PunchCombo",punchcombo);
             }
         }
-        if (canhit && Input.GetKeyUp(KeyCode.X))
+        if (canhit && Input.GetKeyDown(KeyCode.X))
         {
             kickcombo++;
             if (kickcombo == 1)
@@ -203,5 +203,7 @@ public class PlayerManager : MonoBehaviour
                 }
             }
         }
+        else
+            PlayerAnim.SetBool("InCombat", false);
     }
 }
