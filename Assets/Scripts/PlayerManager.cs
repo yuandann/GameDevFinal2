@@ -177,4 +177,27 @@ public class PlayerManager : MonoBehaviour
             PlayerAnim.SetBool("InCombat", false);
        
     }
+
+    private void CheckHitBoxAll()
+    {
+        RaycastHit2D[] boxResult;
+        if (face_left)
+            boxResult = Physics2D.BoxCastAll(gameObject.transform.position, new Vector2(1, 1), 0f, new Vector2(-1, 0), 1f, 1 << 8);
+        else
+            boxResult = Physics2D.BoxCastAll(gameObject.transform.position, new Vector2(1, 1), 0f, new Vector2(1, 0), 1f, 1 << 8);
+        if (boxResult != null)
+        {
+            //Debug.Log(boxResult.collider.name);
+            //if (boxResult.collider.CompareTag("Enemy"))
+            {
+                //CharacterManager[] tmp = boxResult.collider.GetComponents<CharacterManager>();
+                for (int i = 0; i < boxResult.Length; i++)
+                {
+                    CharacterManager tmp = boxResult[i].collider.GetComponent<CharacterManager>();
+                    tmp.life--;
+                    tmp.Checklife();
+                }
+            }
+        }
+    }
 }
