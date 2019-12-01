@@ -30,8 +30,10 @@ public class Enemy : MonoBehaviour
         // Start is called before the first frame update
         void Start()
         {
+            maxHP = GetComponent<CharacterManager>().life; //HP is called "life" in CharacterManager, setting this up to link with Enemy script
             currentHP = maxHP;
             myState = EnemyState.Idle;
+            pc = GameObject.FindWithTag("Player").GetComponent<PlayerManager>();
         }
     
         // Update is called once per frame
@@ -64,7 +66,14 @@ public class Enemy : MonoBehaviour
                     }
                     else
                     {
-                        transform.Translate(pc.transform.position - transform.position);
+                        //original code:
+                        //transform.Translate(pc.transform.position - transform.position);
+                        //note: enemy would instantly teleport to player position
+                        //quick fix (need to come up with a better way for enemy movement):
+                        //Debug.Log("Enemy Moving");
+                        //transform.Translate(Time.fixedDeltaTime*(pc.transform.position - transform.position)/5);
+                        //new code:
+                        transform.position = Vector3.MoveTowards(transform.position, pc.transform.position, 0.025f);
                     }
                     break;
                 case EnemyState.AttackStartup:
@@ -90,6 +99,7 @@ public class Enemy : MonoBehaviour
                     break;
                 case EnemyState.HitStun:
                     hitStunTimer--;
+                    Debug.Log("Ouch");
                     if (hitStunTimer <= 0)
                     {
                         EnterState(EnemyState.Idle);
