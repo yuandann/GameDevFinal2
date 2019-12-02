@@ -199,8 +199,8 @@ MonoBehaviour:
   startupTime: 0
   activeTime: 0
   endlagTime: 0
-  damage: 0
   horizontalKB: 0
+  damage: 1
   hitBox: {fileID: 5726919291639318440}
   horizontalRange: 0
   verticalRange: 0
