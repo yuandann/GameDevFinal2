@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
         public enum EnemyState
         {
             Idle,
+            AttackIdle,
             Walking,
             AttackStartup,
             AttackActive,
@@ -31,7 +32,7 @@ public class Enemy : MonoBehaviour
         void Start()
         {
             currentHP = maxHP;
-            myState = EnemyState.Idle;
+            myState = EnemyState.AttackIdle;
         }
     
         // Update is called once per frame
@@ -39,7 +40,7 @@ public class Enemy : MonoBehaviour
         {
             switch (myState)
             {
-                case EnemyState.Idle:
+                case EnemyState.AttackIdle:
                     idleTimer--;
                     if (idleTimer <= 0)
                     {
@@ -85,14 +86,14 @@ public class Enemy : MonoBehaviour
                     endlagTimer--;
                     if (endlagTimer <= 0)
                     {
-                        EnterState(EnemyState.Idle);
+                        EnterState(EnemyState.AttackIdle);
                     }
                     break;
                 case EnemyState.HitStun:
                     hitStunTimer--;
                     if (hitStunTimer <= 0)
                     {
-                        EnterState(EnemyState.Idle);
+                        EnterState(EnemyState.AttackIdle);
                     }
                     break;
                 case EnemyState.Airborn:
@@ -107,7 +108,7 @@ public class Enemy : MonoBehaviour
                     if (proneTimer <= 0)
                     {
                         vulnerable = true;
-                        EnterState(EnemyState.Idle);
+                        EnterState(EnemyState.AttackIdle);
                     }
                     break;
                 case EnemyState.Dying:

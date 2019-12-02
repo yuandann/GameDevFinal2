@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8427570579189990613}
   - component: {fileID: 6895839467582876074}
   - component: {fileID: 1888343834434734947}
+  - component: {fileID: 2572854466044219159}
   m_Layer: 8
   m_Name: FakeEnemy
   m_TagString: Enemy
@@ -48,8 +49,8 @@ MonoBehaviour:
   life: 10
   Type: 0
   SR: {fileID: 0}
-  get_hit: 0
-  move_speed: 0
+  gethit: 0
+  movespeed: 0
 --- !u!212 &6895839467582876074
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -125,3 +126,34 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2572854466044219159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7363730977726993077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba2a7675c67004abaa88f344100a4cb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pc: {fileID: 0}
+  myAttack: {fileID: 0}
+  myAnim: {fileID: 0}
+  idleTimer: 0
+  proneTimer: 0
+  startupTimer: 0
+  activeTimer: 0
+  endlagTimer: 0
+  hitStunTimer: 0
+  idleMax: 0
+  proneMax: 0
+  dyingTimer: 0
+  groundLevel: 0
+  fallSpeed: 0
+  currentHP: 0
+  maxHP: 0
+  active: 0
+  vulnerable: 0
+  myState: 0
