@@ -33,6 +33,10 @@ public class PlayerManager : MonoBehaviour
         //CheckHitbox();
         //Debug.Log(transform.position.x +"  "+ (CM.ma.position.x - CM.ma.rect.width / 2));
         //move
+        if (!PlayerAnim.GetBool("InCombat"))
+        {
+
+        }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             if (!CM.SR.flipX)
@@ -187,9 +191,9 @@ public class PlayerManager : MonoBehaviour
     {
         RaycastHit2D[] boxResult;
         if (face_left)
-            boxResult = Physics2D.BoxCastAll(gameObject.transform.position, new Vector2(1, 1), 0f, new Vector2(-1, 0), 1f, 1 << 8);
+            boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), new Vector2(1, 1), 0f, new Vector2(-1, 0), 1.5f, 1 << 8);
         else
-            boxResult = Physics2D.BoxCastAll(gameObject.transform.position, new Vector2(1, 1), 0f, new Vector2(1, 0), 1f, 1 << 8);
+            boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), new Vector2(1, 1), 0f, new Vector2(1, 0), 1.5f, 1 << 8);
         if (boxResult != null)
         {
             PlayerAnim.SetBool("InCombat", true);

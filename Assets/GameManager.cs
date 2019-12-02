@@ -17,12 +17,18 @@ public class GameManager : MonoBehaviour
     public GameObject Instantiator2;
     public GameObject Detector;
 
+    public GameObject[] EnemyList;
+
     //Important! Decide whether and when does the camera stop following player and the enemy starts instantiating
     //basically set up an empty object in the game
     //and once the player get past that object
     //this flag becomes true
     [SerializeField]
     private bool inCombat;
+
+    public float Lerping = 0;
+    private bool Start_Making_Enemy = false;
+    private bool recalibrate_camera = false;
 
     // Start is called before the first frame update
     void Start()
@@ -38,12 +44,46 @@ public class GameManager : MonoBehaviour
         //EnemyInstantiation();
         //else()
         if (!inCombat)
-            CameraFollow();
+        {
+            if (recalibrate_camera)
+            {
+                if (Lerping <= 1)
+                {
+                    Lerping += 0.05f;
+                    StartCoroutine(CameraPositionRecalibration());
+                }
+                else
+                {
+                    StopCoroutine(CameraPositionRecalibration());
+                    recalibrate_camera = false;
+                    Lerping = 0;
+                }
+            }
+            else
+                CameraFollow();
+        }
         else
         {
-            CombatCameraPositionFix();
-        }
+            if (!Start_Making_Enemy)
+            {
+                Start_Making_Enemy = true;
+                InstantiateEnemy();
+            }
+            if (Lerping <= 1)
+            {
+                Lerping += 0.05f;
+            }
+            if (Lerping <= 1)
+            {
+                StartCoroutine(CombatCameraPositionFix());
+            }
+            else
+            {
+                StopCoroutine(CombatCameraPositionFix());
+                CheckInCombat();
+            }
             
+        }
 
         //if(inCombat)
         //Instantiator1.instantiateEnemy...
@@ -57,21 +97,52 @@ public class GameManager : MonoBehaviour
     }
 
     //this will later change to ienumerator for smooth animation
-    void CombatCameraPositionFix()
+    IEnumerator CombatCameraPositionFix()
     {
-        if (Camera.transform.position.y != 0)
+        Vector3 StartPosition = Camera.transform.localPosition;
+        Vector3 EndPosition = new Vector3(Camera.transform.localPosition.x, 0f, -10);
+        //while (Camera.transform.position.y <= 0)
+        while (Lerping <= 1)
         {
             Debug.Log("Fixing Camera!");
-            Vector3 StartPosition = Camera.transform.localPosition;
-            Vector3 EndPosition = new Vector3(Camera.transform.localPosition.x, 0f, Camera.transform.localPosition.z);
             //Camera.transform.position.Set(Camera.transform.position.x, 0f, Camera.transform.position.z);
-            Camera.transform.localPosition = Vector3.Lerp(StartPosition, EndPosition, 1);
+            Camera.transform.localPosition = Vector3.Lerp(StartPosition, EndPosition, Lerping);
+            yield return null;
         }
+    }
+
+    IEnumerator CameraPositionRecalibration()
+    {
+        Vector3 StartPosition = Camera.transform.localPosition;
+        //Vector3 EndPosition = new Vector3(Camera.transform.localPosition.x, 0f, -10);
+        Vector3 EndPosition = player.transform.position + offset;
+        //while (Camera.transform.position.y <= 0)
+        while (Lerping <= 1)
+        {
+            Debug.Log("Fixing Camera!");
+            //Camera.transform.position.Set(Camera.transform.position.x, 0f, Camera.transform.position.z);
+            Camera.transform.localPosition = Vector3.Lerp(StartPosition, EndPosition, Lerping);
+            yield return null;
+        }
+    }
+
+    void InstantiateEnemy()
+    {
+        Instantiator1.GetComponent<InstantiatorManager>().MakeEnemy();
     }
 
     void CheckInCombat()
     {
         //Do Something to InCombat
+        EnemyList = GameObject.FindGameObjectsWithTag("Enemy");
+        if (EnemyList.Length == 0)
+        {
+            inCombat = false;
+            Start_Making_Enemy = false;
+            Lerping = 0;
+            Detector.transform.position += new Vector3(10f,0f);
+            recalibrate_camera = true;
+        }
     }
 
     void PlayerPositionCheck()
