@@ -2182,7 +2182,7 @@ PrefabInstance:
     - target: {fileID: 7363730977726993077, guid: fd189b5b806677742890e9c2626279ff,
         type: 3}
       propertyPath: m_Name
-      value: FakeEnemy
+      value: FashionKid
       objectReference: {fileID: 0}
     - target: {fileID: 7363730977726993077, guid: fd189b5b806677742890e9c2626279ff,
         type: 3}

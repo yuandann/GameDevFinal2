@@ -10,6 +10,8 @@ public class CharacterManager : MonoBehaviour
     public bool gethit;
     public float movespeed;
 
+    public GameObject hitfx;
+
     private Animator CharacterAnim;
     //[SerializeField]
     //public GameObject move_area;
@@ -32,6 +34,8 @@ public class CharacterManager : MonoBehaviour
     }
     public void Checklife()
     {
+        //Instantiate(hitfx, transform.position, Quaternion.identity);
+       // hitfx = GetComponent<Animator>().Play("hit");
         Debug.Log(this.name+" Life: "+ life);
         if (life <= 0)
         {
