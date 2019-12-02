@@ -66,6 +66,7 @@ public class Enemy : MonoBehaviour
                     }
                     else
                     {
+                        //Jason:
                         //original code:
                         //transform.Translate(pc.transform.position - transform.position);
                         //note: enemy would instantly teleport to player position
@@ -136,41 +137,41 @@ public class Enemy : MonoBehaviour
             switch (endState)
             {
                 case EnemyState.Idle:
-                    myAnim.Play("Idle");
+                    myAnim.Play("Idle Animation");
                     idleTimer = idleMax;
                     break;
                 case EnemyState.Walking:
-                    myAnim.Play("Walking");
+                    myAnim.Play("Walking Animation");
                     break;
                 case EnemyState.AttackStartup:
-                    myAnim.Play("Attack Startup");
+                    myAnim.Play("Attack Startup Animation");
                     startupTimer = myAttack.startupTime;
                     break;
                 case EnemyState.AttackActive:
-                    myAnim.Play("Attack Active");
+                    myAnim.Play("Attack Active Animation");
                     myAttack.enabled = true;
                     myAttack.hitYet = false;
                     activeTimer = myAttack.startupTime;
                     break;
                 case EnemyState.AttackEndlag:
-                    myAnim.Play("Attack Endlag");
+                    myAnim.Play("Attack Endlag Animation");
                     myAttack.enabled = false;
                     endlagTimer = myAttack.startupTime;
                     break;
                 case EnemyState.HitStun:
-                    myAnim.Play("HitStun");
+                    myAnim.Play("HitStun Animation");
                     break;
                 case EnemyState.Airborn:
                     groundLevel = transform.position.x;
-                    myAnim.Play("Airborne");
+                    myAnim.Play("Airborn Animation Animation");
                     break;
                 case EnemyState.Prone:
                     vulnerable = false;
-                    myAnim.Play("Prone");
+                    myAnim.Play("Prone Animation");
                     proneTimer = proneMax;
                     break;
                 case EnemyState.Dying:
-                    myAnim.Play("Dying");
+                    myAnim.Play("Dying Animation");
                     dyingTimer = 30;
                     break;
             }
@@ -178,7 +179,8 @@ public class Enemy : MonoBehaviour
     
         public void GetHit(AttackScript hitBy)
         {
-            currentHP -= hitBy.damage;
+        //currentHP -= hitBy.damage;
+            GetComponent<CharacterManager>().life -= hitBy.damage;
             hitStunTimer = 120;
             EnterState(EnemyState.HitStun);
         }
