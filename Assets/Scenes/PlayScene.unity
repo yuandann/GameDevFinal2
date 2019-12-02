@@ -205,8 +205,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -2233,6 +2231,90 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd189b5b806677742890e9c2626279ff, type: 3}
+--- !u!1001 &6242249415260293495
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4728237270301355117, guid: edf8755d371a34cfbbfa2e025c6a2104,
+        type: 3}
+      propertyPath: m_Name
+      value: hit particle
+      objectReference: {fileID: 0}
+    - target: {fileID: 4728237270301355117, guid: edf8755d371a34cfbbfa2e025c6a2104,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5438330072712894276, guid: edf8755d371a34cfbbfa2e025c6a2104,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.109
+      objectReference: {fileID: 0}
+    - target: {fileID: 5438330072712894276, guid: edf8755d371a34cfbbfa2e025c6a2104,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.591
+      objectReference: {fileID: 0}
+    - target: {fileID: 5438330072712894276, guid: edf8755d371a34cfbbfa2e025c6a2104,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5438330072712894276, guid: edf8755d371a34cfbbfa2e025c6a2104,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5438330072712894276, guid: edf8755d371a34cfbbfa2e025c6a2104,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5438330072712894276, guid: edf8755d371a34cfbbfa2e025c6a2104,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5438330072712894276, guid: edf8755d371a34cfbbfa2e025c6a2104,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5438330072712894276, guid: edf8755d371a34cfbbfa2e025c6a2104,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5438330072712894276, guid: edf8755d371a34cfbbfa2e025c6a2104,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5438330072712894276, guid: edf8755d371a34cfbbfa2e025c6a2104,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5438330072712894276, guid: edf8755d371a34cfbbfa2e025c6a2104,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2572854466044219159, guid: fd189b5b806677742890e9c2626279ff,
+        type: 3}
+      propertyPath: myAnim
+      value: 
+      objectReference: {fileID: 2130324421}
+    - target: {fileID: 2572854466044219159, guid: fd189b5b806677742890e9c2626279ff,
+        type: 3}
+      propertyPath: pc
+      value: 
+      objectReference: {fileID: 8989300774779295440}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: edf8755d371a34cfbbfa2e025c6a2104, type: 3}
 --- !u!212 &6895839466737344191
 SpriteRenderer:
   m_ObjectHideFlags: 0

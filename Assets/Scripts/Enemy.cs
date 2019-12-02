@@ -137,41 +137,41 @@ public class Enemy : MonoBehaviour
             switch (endState)
             {
                 case EnemyState.Idle:
-                    myAnim.Play("Idle Animation");
+                    myAnim.Play("Idle");
                     idleTimer = idleMax;
                     break;
                 case EnemyState.Walking:
-                    myAnim.Play("Walking Animation");
+                    myAnim.Play("Walking");
                     break;
                 case EnemyState.AttackStartup:
-                    myAnim.Play("Attack Startup Animation");
+                    myAnim.Play("Attack Startup");
                     startupTimer = myAttack.startupTime;
                     break;
                 case EnemyState.AttackActive:
-                    myAnim.Play("Attack Active Animation");
+                    myAnim.Play("Attack Active");
                     myAttack.enabled = true;
                     myAttack.hitYet = false;
                     activeTimer = myAttack.startupTime;
                     break;
                 case EnemyState.AttackEndlag:
-                    myAnim.Play("Attack Endlag Animation");
+                    myAnim.Play("Attack Endlag");
                     myAttack.enabled = false;
                     endlagTimer = myAttack.startupTime;
                     break;
                 case EnemyState.HitStun:
-                    myAnim.Play("HitStun Animation");
+                    myAnim.Play("HitStun");
                     break;
                 case EnemyState.Airborn:
                     groundLevel = transform.position.x;
-                    myAnim.Play("Airborn Animation Animation");
+                    myAnim.Play("Airborne");
                     break;
                 case EnemyState.Prone:
                     vulnerable = false;
-                    myAnim.Play("Prone Animation");
+                    myAnim.Play("Prone");
                     proneTimer = proneMax;
                     break;
                 case EnemyState.Dying:
-                    myAnim.Play("Dying Animation");
+                    myAnim.Play("Dying");
                     dyingTimer = 30;
                     break;
             }
