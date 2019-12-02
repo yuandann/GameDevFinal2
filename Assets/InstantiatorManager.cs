@@ -26,7 +26,7 @@ public class InstantiatorManager : MonoBehaviour
         }
     }
 
-    void MakeEnemy()
+    public void MakeEnemy()
     {
         StartCoroutine(InstantiateEnemy());
     }
@@ -35,8 +35,8 @@ public class InstantiatorManager : MonoBehaviour
     {
         for (int i = 0; i < numbers; i++)
         {
-            yield return new WaitForSeconds(time);
             Object.Instantiate(EnemyPrefab, transform.position, transform.rotation);
+            yield return new WaitForSeconds(time);
         }
     }
 }

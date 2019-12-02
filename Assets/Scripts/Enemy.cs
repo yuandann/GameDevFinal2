@@ -15,7 +15,6 @@ public class Enemy : MonoBehaviour
         public enum EnemyState
         {
             Idle,
-            AttackIdle,
             Walking,
             AttackStartup,
             AttackActive,
@@ -31,8 +30,10 @@ public class Enemy : MonoBehaviour
         // Start is called before the first frame update
         void Start()
         {
+            maxHP = GetComponent<CharacterManager>().life; //HP is called "life" in CharacterManager, setting this up to link with Enemy script
             currentHP = maxHP;
-            myState = EnemyState.AttackIdle;
+            myState = EnemyState.Idle;
+            pc = GameObject.FindWithTag("Player").GetComponent<PlayerManager>();
         }
     
         // Update is called once per frame
@@ -40,7 +41,7 @@ public class Enemy : MonoBehaviour
         {
             switch (myState)
             {
-                case EnemyState.AttackIdle:
+                case EnemyState.Idle:
                     idleTimer--;
                     if (idleTimer <= 0)
                     {
@@ -65,7 +66,14 @@ public class Enemy : MonoBehaviour
                     }
                     else
                     {
-                        transform.Translate(pc.transform.position - transform.position);
+                        //original code:
+                        //transform.Translate(pc.transform.position - transform.position);
+                        //note: enemy would instantly teleport to player position
+                        //quick fix (need to come up with a better way for enemy movement):
+                        //Debug.Log("Enemy Moving");
+                        //transform.Translate(Time.fixedDeltaTime*(pc.transform.position - transform.position)/5);
+                        //new code:
+                        transform.position = Vector3.MoveTowards(transform.position, pc.transform.position, 0.025f);
                     }
                     break;
                 case EnemyState.AttackStartup:
@@ -86,14 +94,15 @@ public class Enemy : MonoBehaviour
                     endlagTimer--;
                     if (endlagTimer <= 0)
                     {
-                        EnterState(EnemyState.AttackIdle);
+                        EnterState(EnemyState.Idle);
                     }
                     break;
                 case EnemyState.HitStun:
                     hitStunTimer--;
+                    Debug.Log("Ouch");
                     if (hitStunTimer <= 0)
                     {
-                        EnterState(EnemyState.AttackIdle);
+                        EnterState(EnemyState.Idle);
                     }
                     break;
                 case EnemyState.Airborn:
@@ -108,7 +117,7 @@ public class Enemy : MonoBehaviour
                     if (proneTimer <= 0)
                     {
                         vulnerable = true;
-                        EnterState(EnemyState.AttackIdle);
+                        EnterState(EnemyState.Idle);
                     }
                     break;
                 case EnemyState.Dying:
@@ -127,41 +136,41 @@ public class Enemy : MonoBehaviour
             switch (endState)
             {
                 case EnemyState.Idle:
-                    myAnim.Play("Idle Animation");
+                    myAnim.Play("Idle");
                     idleTimer = idleMax;
                     break;
                 case EnemyState.Walking:
-                    myAnim.Play("Walking Animation");
+                    myAnim.Play("Walking");
                     break;
                 case EnemyState.AttackStartup:
-                    myAnim.Play("Attack Startup Animation");
+                    myAnim.Play("Attack Startup");
                     startupTimer = myAttack.startupTime;
                     break;
                 case EnemyState.AttackActive:
-                    myAnim.Play("Attack Active Animation");
+                    myAnim.Play("Attack Active");
                     myAttack.enabled = true;
                     myAttack.hitYet = false;
                     activeTimer = myAttack.startupTime;
                     break;
                 case EnemyState.AttackEndlag:
-                    myAnim.Play("Attack Endlag Animation");
+                    myAnim.Play("Attack Endlag");
                     myAttack.enabled = false;
                     endlagTimer = myAttack.startupTime;
                     break;
                 case EnemyState.HitStun:
-                    myAnim.Play("HitStun Animation");
+                    myAnim.Play("HitStun");
                     break;
                 case EnemyState.Airborn:
                     groundLevel = transform.position.x;
-                    myAnim.Play("Airborn Animation Animation");
+                    myAnim.Play("Airborne");
                     break;
                 case EnemyState.Prone:
                     vulnerable = false;
-                    myAnim.Play("Prone Animation");
+                    myAnim.Play("Prone");
                     proneTimer = proneMax;
                     break;
                 case EnemyState.Dying:
-                    myAnim.Play("Dying Animation");
+                    myAnim.Play("Dying");
                     dyingTimer = 30;
                     break;
             }

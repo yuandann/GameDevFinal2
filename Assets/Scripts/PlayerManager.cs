@@ -33,6 +33,10 @@ public class PlayerManager : MonoBehaviour
         //CheckHitbox();
         //Debug.Log(transform.position.x +"  "+ (CM.ma.position.x - CM.ma.rect.width / 2));
         //move
+        if (!PlayerAnim.GetBool("InCombat"))
+        {
+
+        }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             if (!CM.SR.flipX)
@@ -70,12 +74,14 @@ public class PlayerManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z))
         {
             StartCombo();
+            Debug.Log(canhit);
             //CM.SR.color = Color.red;
             CheckHitBoxAll();
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
             StartCombo();
+            Debug.Log(canhit);
             //CM.SR.color = Color.red;
             CheckHitBoxAll();
         }
@@ -87,7 +93,7 @@ public class PlayerManager : MonoBehaviour
 
     private void StartCombo()
     {
-        if (canhit && Input.GetKeyUp(KeyCode.Z))
+        if (canhit && Input.GetKeyDown(KeyCode.Z))
         {
             punchcombo++;
             if (punchcombo == 1)
@@ -95,7 +101,7 @@ public class PlayerManager : MonoBehaviour
                 PlayerAnim.SetInteger("PunchCombo",punchcombo);
             }
         }
-        if (canhit && Input.GetKeyUp(KeyCode.X))
+        if (canhit && Input.GetKeyDown(KeyCode.X))
         {
             kickcombo++;
             if (kickcombo == 1)
@@ -106,7 +112,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void CheckCombo()
     {
-        canhit = false;
+        //canhit = false;
         
         if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_punch1") && punchcombo == 1)
         {
@@ -162,11 +168,11 @@ public class PlayerManager : MonoBehaviour
         boxResult = Physics2D.BoxCast(gameObject.transform.position, new Vector2(1,1), 0f, new Vector2(1,0),1f);
         if (boxResult.collider != null)
         {
-            PlayerAnim.SetBool("InCombat", true);
+         
             Debug.Log(boxResult.collider);
             if (boxResult.collider.CompareTag("Enemy"))
             {
-               
+                PlayerAnim.SetBool("InCombat", true);
                 CharacterManager[] tmp = boxResult.collider.GetComponents<CharacterManager>();
                 for (int i = 0; i < tmp.Length; i++)
                 {
@@ -174,20 +180,20 @@ public class PlayerManager : MonoBehaviour
                     tmp[i].Checklife();
                 }
             }
+            else
+                PlayerAnim.SetBool("InCombat", false);
        
         }
-        else
-            PlayerAnim.SetBool("InCombat", false);
-       
+
     }
 
     private void CheckHitBoxAll()
     {
         RaycastHit2D[] boxResult;
         if (face_left)
-            boxResult = Physics2D.BoxCastAll(gameObject.transform.position, new Vector2(1, 1), 0f, new Vector2(-1, 0), 1f, 1 << 8);
+            boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), new Vector2(1, 1), 0f, new Vector2(-1, 0), 1.5f, 1 << 8);
         else
-            boxResult = Physics2D.BoxCastAll(gameObject.transform.position, new Vector2(1, 1), 0f, new Vector2(1, 0), 1f, 1 << 8);
+            boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), new Vector2(1, 1), 0f, new Vector2(1, 0), 1.5f, 1 << 8);
         if (boxResult != null)
         {
             PlayerAnim.SetBool("InCombat", true);
@@ -203,5 +209,7 @@ public class PlayerManager : MonoBehaviour
                 }
             }
         }
+        else
+            PlayerAnim.SetBool("InCombat", false);
     }
 }
