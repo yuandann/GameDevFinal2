@@ -66,6 +66,7 @@ public class Enemy : MonoBehaviour
                     }
                     else
                     {
+                        //Jason:
                         //original code:
                         //transform.Translate(pc.transform.position - transform.position);
                         //note: enemy would instantly teleport to player position
@@ -178,7 +179,8 @@ public class Enemy : MonoBehaviour
     
         public void GetHit(AttackScript hitBy)
         {
-            currentHP -= hitBy.damage;
+        //currentHP -= hitBy.damage;
+            GetComponent<CharacterManager>().life -= hitBy.damage;
             hitStunTimer = 120;
             EnterState(EnemyState.HitStun);
         }

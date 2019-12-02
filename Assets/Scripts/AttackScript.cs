@@ -15,7 +15,9 @@ public class AttackScript : MonoBehaviour
         
         public int startupTime, activeTime, endlagTime; //num of frames
     
-        public float damage, horizontalKB;
+        public float horizontalKB;
+
+        public int damage;
     
         public BoxCollider2D hitBox;
     
