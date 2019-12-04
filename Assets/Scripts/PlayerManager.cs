@@ -9,6 +9,9 @@ public class PlayerManager : MonoBehaviour
     public float Player_speed = 1;
     private bool face_left=false;
 
+    public AudioSource punchwhiff;
+    public AudioSource kickwhiff;
+
     private int punchcombo = 0;
     private int kickcombo=0;
 
@@ -83,6 +86,13 @@ public class PlayerManager : MonoBehaviour
             //CM.SR.color = Color.red;
             CheckHitBoxAll();
         }
+        //block
+        if(Input.GetKey(KeyCode.LeftShift))
+            PlayerAnim.SetBool("Block",true);
+        else
+            PlayerAnim.SetBool("Block",false);
+        
+        
 //        if (Input.GetKeyUp(KeyCode.Z))
 //        {
 //            CM.SR.color = Color.white;
@@ -159,31 +169,7 @@ public class PlayerManager : MonoBehaviour
             kickcombo = 0;
         }
     }
-
-    private void CheckHitbox()
-    {
-        RaycastHit2D boxResult;
-        boxResult = Physics2D.BoxCast(gameObject.transform.position, new Vector2(1,1), 0f, new Vector2(1,0),1f);
-        if (boxResult.collider != null)
-        {
-            PlayerAnim.SetBool("InCombat", true);
-            Debug.Log(boxResult.collider);
-            if (boxResult.collider.CompareTag("Enemy"))
-            {
-               
-                CharacterManager[] tmp = boxResult.collider.GetComponents<CharacterManager>();
-                for (int i = 0; i < tmp.Length; i++)
-                {
-                    tmp[i].life--;
-                    tmp[i].Checklife();
-                }
-            }
-       
-        }
-        else
-            PlayerAnim.SetBool("InCombat", false);
-       
-    }
+    
 
     private void CheckHitBoxAll()
     {
@@ -192,9 +178,17 @@ public class PlayerManager : MonoBehaviour
             boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), new Vector2(1, 4), 0f, new Vector2(-1, 0), 1.5f, 1 << 8);
         else
             boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), new Vector2(1, 4), 0f, new Vector2(1, 0), 1.5f, 1 << 8);
+        if(boxResult.Length == 0)
+        {
+                if (Input.GetKeyDown(KeyCode.Z))
+                    punchwhiff.Play();
+                else if (Input.GetKeyDown(KeyCode.X))
+                    kickwhiff.Play(); 
+        }
+
         if (boxResult != null)
         {
-           
+
             //Debug.Log(boxResult.collider.name);
             //if (boxResult.collider.CompareTag("Enemy"))
             {
@@ -202,11 +196,12 @@ public class PlayerManager : MonoBehaviour
                 for (int i = 0; i < boxResult.Length; i++)
                 {
                     CharacterManager tmp = boxResult[i].collider.GetComponent<CharacterManager>();
-                    //tmp.life--;
+                    tmp.life--;
                     tmp.GetComponent<Enemy>().GetHit(this.GetComponent<AttackScript>());
                     tmp.Checklife();
                 }
             }
         }
+
     }
 }
