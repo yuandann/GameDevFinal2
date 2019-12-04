@@ -7,8 +7,9 @@ public class Enemy : MonoBehaviour
     public PlayerManager pc;
         public AttackScript myAttack;
         public Animator myAnim;
-        public int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer;
-        public float groundLevel, fallSpeed;
+        private int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, proneMax, dyingTimer, walkTimer;
+        public int idleMin, idleMax, walkTimerMin, walkTimerMax;
+        public float groundLevel, fallSpeed, walkSpeedMin, walkSpeedMax, walkSpeed;
         public float currentHP, maxHP;
         
         private GameObject hitfx;
@@ -41,6 +42,7 @@ public class Enemy : MonoBehaviour
            kickfx = GetComponent<CharacterManager>().kick;
             myState = EnemyState.Idle;
             pc = GameObject.FindWithTag("Player").GetComponent<PlayerManager>();
+            walkSpeed = Random.Range(walkSpeedMin, walkSpeedMax);
         }
     
         // Update is called once per frame
@@ -73,6 +75,15 @@ public class Enemy : MonoBehaviour
                     }
                     else
                     {
+                        if (walkTimer <= 0)
+                        {
+                            EnterState(EnemyState.Idle);
+                        }
+                        else
+                        {
+                            transform.position = Vector3.MoveTowards(transform.position, pc.transform.position, walkSpeed);
+                            walkTimer--;
+                        }
                         //original code:
                         //transform.Translate(pc.transform.position - transform.position);
                         //note: enemy would instantly teleport to player position
@@ -80,7 +91,6 @@ public class Enemy : MonoBehaviour
                         //Debug.Log("Enemy Moving");
                         //transform.Translate(Time.fixedDeltaTime*(pc.transform.position - transform.position)/5);
                         //new code:
-                        transform.position = Vector3.MoveTowards(transform.position, pc.transform.position, 0.025f);
                     }
                     break;
                 case EnemyState.AttackStartup:
