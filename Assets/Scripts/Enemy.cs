@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour
            kickfx = GetComponent<CharacterManager>().kick;
             myState = EnemyState.Idle;
             pc = GameObject.FindWithTag("Player").GetComponent<PlayerManager>();
-            walkSpeed = Random.Range(walkSpeedMin, walkSpeedMax);
+            walkSpeed = Random.Range(0.01f, 0.035f);
         }
     
         // Update is called once per frame
@@ -154,10 +154,11 @@ public class Enemy : MonoBehaviour
             {
                 case EnemyState.Idle:
                     myAnim.Play("Idle");
-                    idleTimer = idleMax;
+                    idleTimer = Random.Range(30, 90);
                     break;
                 case EnemyState.Walking:
                     myAnim.Play("Walking");
+                    walkTimer = Random.Range(90, 240);
                     break;
                 case EnemyState.AttackActive:
                     myAnim.Play("Attack");
