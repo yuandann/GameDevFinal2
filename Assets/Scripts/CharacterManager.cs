@@ -8,6 +8,8 @@ public class CharacterManager : MonoBehaviour
     public int Type;
     public SpriteRenderer SR;
 
+    public AudioSource punch;
+    public AudioSource kick;
     public GameObject hitfx;
     
     //[SerializeField]
@@ -30,8 +32,6 @@ public class CharacterManager : MonoBehaviour
     }
     public void Checklife()
     {
-        //Instantiate(hitfx, transform.position, Quaternion.identity);
-       // hitfx = GetComponent<Animator>().Play("hit");
         Debug.Log(this.name+" Life: "+ life);
         if (life <= 0)
         {

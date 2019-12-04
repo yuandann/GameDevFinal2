@@ -10,6 +10,10 @@ public class Enemy : MonoBehaviour
         public int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer;
         public float groundLevel, fallSpeed;
         public float currentHP, maxHP;
+        
+        private GameObject hitfx;
+        private AudioSource punchfx;
+        private AudioSource kickfx;
     
         public bool active, vulnerable;
         public enum EnemyState
@@ -32,6 +36,9 @@ public class Enemy : MonoBehaviour
         {
             maxHP = GetComponent<CharacterManager>().life; //HP is called "life" in CharacterManager, setting this up to link with Enemy script
             currentHP = maxHP;
+            hitfx = GetComponent<CharacterManager>().hitfx;
+            punchfx = GetComponent<CharacterManager>().punch;
+           kickfx = GetComponent<CharacterManager>().kick;
             myState = EnemyState.Idle;
             pc = GameObject.FindWithTag("Player").GetComponent<PlayerManager>();
         }
@@ -62,7 +69,7 @@ public class Enemy : MonoBehaviour
                     if (Mathf.Abs(pc.transform.position.x - transform.position.x) <= myAttack.horizontalRange &&
                         Mathf.Abs(pc.transform.position.y - transform.position.y) <= myAttack.verticalRange)
                     {
-                        EnterState(EnemyState.AttackStartup);
+                        EnterState(EnemyState.AttackActive);
                     }
                     else
                     {
@@ -76,27 +83,27 @@ public class Enemy : MonoBehaviour
                         transform.position = Vector3.MoveTowards(transform.position, pc.transform.position, 0.025f);
                     }
                     break;
-                case EnemyState.AttackStartup:
-                    startupTimer--;
-                    if (startupTimer <= 0)
-                    {
-                        EnterState(EnemyState.AttackActive);
-                    }
-                    break;
+//                case EnemyState.AttackStartup:
+//                    startupTimer--;
+//                    if (startupTimer <= 0)
+//                    {
+//                        EnterState(EnemyState.AttackActive);
+//                    }
+//                    break;
                 case EnemyState.AttackActive:
                     activeTimer--;
                     if (activeTimer <= 0)
                     {
-                        EnterState(EnemyState.AttackEndlag);
-                    }
-                    break;
-                case EnemyState.AttackEndlag:
-                    endlagTimer--;
-                    if (endlagTimer <= 0)
-                    {
                         EnterState(EnemyState.Idle);
                     }
                     break;
+//                case EnemyState.AttackEndlag:
+//                    endlagTimer--;
+//                    if (endlagTimer <= 0)
+//                    {
+//                        EnterState(EnemyState.Idle);
+//                    }
+//                    break;
                 case EnemyState.HitStun:
                     hitStunTimer--;
                     Debug.Log("Ouch");
@@ -153,13 +160,13 @@ public class Enemy : MonoBehaviour
                     break;
                 case EnemyState.Airborn:
                     groundLevel = transform.position.x;
-                    myAnim.Play("Falling");
+                    myAnim.Play("Airborne");
                     break;
-//                case EnemyState.Prone:
-//                    vulnerable = false;
-//                    myAnim.Play("Prone");
-//                    proneTimer = proneMax;
-//                    break;
+                case EnemyState.Prone:
+                    vulnerable = false;
+                    myAnim.Play("Prone");
+                    proneTimer = proneMax;
+                    break;
                 case EnemyState.Dying:
                     myAnim.Play("Dying");
                     dyingTimer = 30;
@@ -169,11 +176,15 @@ public class Enemy : MonoBehaviour
     
         public void GetHit(AttackScript hitBy)
         {
+            if (Input.GetKeyDown(KeyCode.Z))
+                punchfx.Play();
+            else if(Input.GetKeyDown(KeyCode.X))
+                kickfx.Play();
             currentHP -= hitBy.damage;
             var particlepos = new Vector2(transform.position.x-1.2f,transform.position.y +3);
-            var hitfx = Instantiate(GetComponent<CharacterManager>().hitfx, particlepos, Quaternion.identity);
+            var hitfxclone = Instantiate(hitfx, particlepos, Quaternion.identity);
             hitStunTimer = 120;
             EnterState(EnemyState.HitStun);
-            Destroy(hitfx, 1f);
+            Destroy(hitfxclone, 1f);
         }
 }
