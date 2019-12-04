@@ -11,7 +11,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 4572098158018626939}
-    m_Position: {x: 230, y: 10, z: 0}
+    m_Position: {x: 260, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5162386547601210865}
     m_Position: {x: -180, y: 10, z: 0}
@@ -23,10 +23,10 @@ AnimatorStateMachine:
     m_Position: {x: 30, y: 80, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3608457743373987537}
-    m_Position: {x: 400, y: 80, z: 0}
+    m_Position: {x: 250, y: -60, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7607060521109775264}
-    m_Position: {x: 435, y: 145, z: 0}
+    m_Position: {x: 420, y: 30, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: -6185851263538102558}
@@ -48,7 +48,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: fashionkid_death
+  m_Name: Dying
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -189,19 +189,7 @@ AnimatorController:
   m_PrefabAsset: {fileID: 0}
   m_Name: FakeEnemy
   serializedVersion: 5
-  m_AnimatorParameters:
-  - m_Name: GotHit
-    m_Type: 4
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: Walking
-    m_Type: 4
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+  m_AnimatorParameters: []
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -222,7 +210,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Punch
+  m_Name: Attack
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -300,7 +288,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Hitstun
+  m_Name: HitStun
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []

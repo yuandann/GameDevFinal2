@@ -7,9 +7,13 @@ public class Enemy : MonoBehaviour
     public PlayerManager pc;
         public AttackScript myAttack;
         public Animator myAnim;
-        public int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer, walkTimer;
+        public int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer;
         public float groundLevel, fallSpeed;
-        public float currentHP, maxHP, walkSpeed;
+        public float currentHP, maxHP;
+        
+        private GameObject hitfx;
+        private AudioSource punchfx;
+        private AudioSource kickfx;
     
         public bool active, vulnerable;
         public enum EnemyState
@@ -32,9 +36,11 @@ public class Enemy : MonoBehaviour
         {
             maxHP = GetComponent<CharacterManager>().life; //HP is called "life" in CharacterManager, setting this up to link with Enemy script
             currentHP = maxHP;
+            hitfx = GetComponent<CharacterManager>().hitfx;
+            punchfx = GetComponent<CharacterManager>().punch;
+           kickfx = GetComponent<CharacterManager>().kick;
             myState = EnemyState.Idle;
             pc = GameObject.FindWithTag("Player").GetComponent<PlayerManager>();
-            walkSpeed = Random.Range(0.01f, 0.035f);
         }
     
         // Update is called once per frame
@@ -67,16 +73,6 @@ public class Enemy : MonoBehaviour
                     }
                     else
                     {
-                        if (walkTimer <= 0)
-                        {
-                            EnterState(EnemyState.Idle);
-                        }
-                        else
-                        {
-                            walkTimer--;
-                            transform.position = Vector3.MoveTowards(transform.position, pc.transform.position, walkSpeed);
-                        }
-                        //Jason:
                         //original code:
                         //transform.Translate(pc.transform.position - transform.position);
                         //note: enemy would instantly teleport to player position
@@ -84,6 +80,7 @@ public class Enemy : MonoBehaviour
                         //Debug.Log("Enemy Moving");
                         //transform.Translate(Time.fixedDeltaTime*(pc.transform.position - transform.position)/5);
                         //new code:
+                        transform.position = Vector3.MoveTowards(transform.position, pc.transform.position, 0.025f);
                     }
                     break;
                 case EnemyState.AttackStartup:
@@ -146,42 +143,32 @@ public class Enemy : MonoBehaviour
             switch (endState)
             {
                 case EnemyState.Idle:
-                    myAnim.Play("Idle Animation");
-                    idleTimer = Random.Range(40, 120);
+                    myAnim.Play("Idle");
+                    idleTimer = idleMax;
                     break;
                 case EnemyState.Walking:
-                    myAnim.Play("Walking Animation");
-                    walkTimer = Random.Range(150, 360);
-                    break;
-                case EnemyState.AttackStartup:
-                    myAnim.Play("Attack Startup Animation");
-                    startupTimer = myAttack.startupTime;
+                    myAnim.Play("Walking");
                     break;
                 case EnemyState.AttackActive:
-                    myAnim.Play("Attack Active Animation");
+                    myAnim.Play("Attack");
                     myAttack.enabled = true;
                     myAttack.hitYet = false;
                     activeTimer = myAttack.startupTime;
                     break;
-                case EnemyState.AttackEndlag:
-                    myAnim.Play("Attack Endlag Animation");
-                    myAttack.enabled = false;
-                    endlagTimer = myAttack.startupTime;
-                    break;
                 case EnemyState.HitStun:
-                    myAnim.Play("HitStun Animation");
+                    myAnim.Play("HitStun");
                     break;
                 case EnemyState.Airborn:
                     groundLevel = transform.position.x;
-                    myAnim.Play("Airborn Animation Animation");
+                    myAnim.Play("Airborne");
                     break;
                 case EnemyState.Prone:
                     vulnerable = false;
-                    myAnim.Play("Prone Animation");
+                    myAnim.Play("Prone");
                     proneTimer = proneMax;
                     break;
                 case EnemyState.Dying:
-                    myAnim.Play("Dying Animation");
+                    myAnim.Play("Dying");
                     dyingTimer = 30;
                     break;
             }
@@ -189,9 +176,15 @@ public class Enemy : MonoBehaviour
     
         public void GetHit(AttackScript hitBy)
         {
-        //currentHP -= hitBy.damage;
-            GetComponent<CharacterManager>().life -= hitBy.damage;
+            if (Input.GetKeyDown(KeyCode.Z))
+                punchfx.Play();
+            else if(Input.GetKeyDown(KeyCode.X))
+                kickfx.Play();
+            currentHP -= hitBy.damage;
+            var particlepos = new Vector2(transform.position.x-1.2f,transform.position.y +3);
+            var hitfxclone = Instantiate(hitfx, particlepos, Quaternion.identity);
             hitStunTimer = 120;
             EnterState(EnemyState.HitStun);
+            Destroy(hitfxclone, 1f);
         }
 }

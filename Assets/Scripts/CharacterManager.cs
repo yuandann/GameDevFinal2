@@ -7,10 +7,11 @@ public class CharacterManager : MonoBehaviour
     public int life;
     public int Type;
     public SpriteRenderer SR;
-    public bool gethit;
-    public float movespeed;
 
-    private Animator CharacterAnim;
+    public AudioSource punch;
+    public AudioSource kick;
+    public GameObject hitfx;
+    
     //[SerializeField]
     //public GameObject move_area;
     //public RectTransform ma;
@@ -20,7 +21,6 @@ public class CharacterManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CharacterAnim = GetComponent<Animator>();
         SR = GetComponent<SpriteRenderer>();
         //ma = move_area.GetComponent<RectTransform>();
     }
