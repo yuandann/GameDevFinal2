@@ -7,9 +7,9 @@ public class Enemy : MonoBehaviour
     public PlayerManager pc;
         public AttackScript myAttack;
         public Animator myAnim;
-        public int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer;
+        public int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer, walkTimer;
         public float groundLevel, fallSpeed;
-        public float currentHP, maxHP;
+        public float currentHP, maxHP, walkSpeed;
     
         public bool active, vulnerable;
         public enum EnemyState
@@ -34,6 +34,7 @@ public class Enemy : MonoBehaviour
             currentHP = maxHP;
             myState = EnemyState.Idle;
             pc = GameObject.FindWithTag("Player").GetComponent<PlayerManager>();
+            walkSpeed = Random.Range(0.01f, 0.035f);
         }
     
         // Update is called once per frame
@@ -66,6 +67,15 @@ public class Enemy : MonoBehaviour
                     }
                     else
                     {
+                        if (walkTimer <= 0)
+                        {
+                            EnterState(EnemyState.Idle);
+                        }
+                        else
+                        {
+                            walkTimer--;
+                            transform.position = Vector3.MoveTowards(transform.position, pc.transform.position, walkSpeed);
+                        }
                         //Jason:
                         //original code:
                         //transform.Translate(pc.transform.position - transform.position);
@@ -74,7 +84,6 @@ public class Enemy : MonoBehaviour
                         //Debug.Log("Enemy Moving");
                         //transform.Translate(Time.fixedDeltaTime*(pc.transform.position - transform.position)/5);
                         //new code:
-                        transform.position = Vector3.MoveTowards(transform.position, pc.transform.position, 0.025f);
                     }
                     break;
                 case EnemyState.AttackStartup:
@@ -138,10 +147,11 @@ public class Enemy : MonoBehaviour
             {
                 case EnemyState.Idle:
                     myAnim.Play("Idle Animation");
-                    idleTimer = idleMax;
+                    idleTimer = Random.Range(40, 120);
                     break;
                 case EnemyState.Walking:
                     myAnim.Play("Walking Animation");
+                    walkTimer = Random.Range(150, 360);
                     break;
                 case EnemyState.AttackStartup:
                     myAnim.Play("Attack Startup Animation");
