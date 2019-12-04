@@ -69,7 +69,7 @@ public class Enemy : MonoBehaviour
                     if (Mathf.Abs(pc.transform.position.x - transform.position.x) <= myAttack.horizontalRange &&
                         Mathf.Abs(pc.transform.position.y - transform.position.y) <= myAttack.verticalRange)
                     {
-                        EnterState(EnemyState.AttackStartup);
+                        EnterState(EnemyState.AttackActive);
                     }
                     else
                     {
@@ -83,27 +83,27 @@ public class Enemy : MonoBehaviour
                         transform.position = Vector3.MoveTowards(transform.position, pc.transform.position, 0.025f);
                     }
                     break;
-                case EnemyState.AttackStartup:
-                    startupTimer--;
-                    if (startupTimer <= 0)
-                    {
-                        EnterState(EnemyState.AttackActive);
-                    }
-                    break;
+//                case EnemyState.AttackStartup:
+//                    startupTimer--;
+//                    if (startupTimer <= 0)
+//                    {
+//                        EnterState(EnemyState.AttackActive);
+//                    }
+//                    break;
                 case EnemyState.AttackActive:
                     activeTimer--;
                     if (activeTimer <= 0)
                     {
-                        EnterState(EnemyState.AttackEndlag);
-                    }
-                    break;
-                case EnemyState.AttackEndlag:
-                    endlagTimer--;
-                    if (endlagTimer <= 0)
-                    {
                         EnterState(EnemyState.Idle);
                     }
                     break;
+//                case EnemyState.AttackEndlag:
+//                    endlagTimer--;
+//                    if (endlagTimer <= 0)
+//                    {
+//                        EnterState(EnemyState.Idle);
+//                    }
+//                    break;
                 case EnemyState.HitStun:
                     hitStunTimer--;
                     Debug.Log("Ouch");

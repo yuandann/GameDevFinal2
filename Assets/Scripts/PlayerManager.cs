@@ -86,11 +86,7 @@ public class PlayerManager : MonoBehaviour
             //CM.SR.color = Color.red;
             CheckHitBoxAll();
         }
-        //block
-        if(Input.GetKey(KeyCode.LeftShift))
-            PlayerAnim.SetBool("Block",true);
-        else
-            PlayerAnim.SetBool("Block",false);
+ 
         
         
 //        if (Input.GetKeyUp(KeyCode.Z))
