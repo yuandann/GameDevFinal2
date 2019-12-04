@@ -36,7 +36,7 @@ public class AttackScript : MonoBehaviour
                 if (other.gameObject.CompareTag("Enemy"))
                 {
                     hitYet = true;
-                    other.gameObject.GetComponent<Enemy>().GetHit(this);
+                    //other.gameObject.GetComponent<Enemy>().GetHit(this);
                 }
             }
             else
