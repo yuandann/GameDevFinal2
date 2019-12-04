@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4678876336703830018}
   - component: {fileID: 9159078557980758302}
   m_Layer: 8
-  m_Name: FakeEnemy
+  m_Name: EnemyPrefab
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,8 +51,7 @@ MonoBehaviour:
   life: 10
   Type: 0
   SR: {fileID: 0}
-  gethit: 0
-  movespeed: 0
+  hitfx: {fileID: 2344894976480626663, guid: 5f17860dbcbb94f24ba3d52bc410f969, type: 3}
 --- !u!212 &6895839467582876074
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -91,7 +90,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4eed210947ba9436788172deb66b8aac, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -99,7 +98,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
 --- !u!61 &1888343834434734947

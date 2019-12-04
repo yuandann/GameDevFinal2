@@ -142,20 +142,11 @@ public class Enemy : MonoBehaviour
                 case EnemyState.Walking:
                     myAnim.Play("Walking");
                     break;
-                case EnemyState.AttackStartup:
-                    myAnim.Play("Attack Startup");
-                    startupTimer = myAttack.startupTime;
-                    break;
                 case EnemyState.AttackActive:
-                    myAnim.Play("Attack Active");
+                    myAnim.Play("Attack");
                     myAttack.enabled = true;
                     myAttack.hitYet = false;
                     activeTimer = myAttack.startupTime;
-                    break;
-                case EnemyState.AttackEndlag:
-                    myAnim.Play("Attack Endlag");
-                    myAttack.enabled = false;
-                    endlagTimer = myAttack.startupTime;
                     break;
                 case EnemyState.HitStun:
                     myAnim.Play("HitStun");
@@ -179,7 +170,10 @@ public class Enemy : MonoBehaviour
         public void GetHit(AttackScript hitBy)
         {
             currentHP -= hitBy.damage;
+            var particlepos = new Vector2(transform.position.x-1.2f,transform.position.y +3);
+            var hitfx = Instantiate(GetComponent<CharacterManager>().hitfx, particlepos, Quaternion.identity);
             hitStunTimer = 120;
             EnterState(EnemyState.HitStun);
+            Destroy(hitfx, 1f);
         }
 }

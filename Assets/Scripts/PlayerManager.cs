@@ -196,7 +196,7 @@ public class PlayerManager : MonoBehaviour
             boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), new Vector2(1, 1), 0f, new Vector2(1, 0), 1.5f, 1 << 8);
         if (boxResult != null)
         {
-            PlayerAnim.SetBool("InCombat", true);
+           
             //Debug.Log(boxResult.collider.name);
             //if (boxResult.collider.CompareTag("Enemy"))
             {
@@ -209,7 +209,5 @@ public class PlayerManager : MonoBehaviour
                 }
             }
         }
-        else
-            PlayerAnim.SetBool("InCombat", false);
     }
 }
