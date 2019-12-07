@@ -7,9 +7,6 @@ public class CharacterManager : MonoBehaviour
     public int life;
     public int Type;
     public SpriteRenderer SR;
-
-    public AudioSource punch;
-    public AudioSource kick;
     public GameObject hitfx;
     
     //[SerializeField]

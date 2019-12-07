@@ -18,6 +18,8 @@ public class AttackScript : MonoBehaviour
         public float horizontalKB;
 
         public int damage;
+
+        public int hitCounter;
     
         public BoxCollider2D hitBox;
     
@@ -31,11 +33,17 @@ public class AttackScript : MonoBehaviour
     
         public void OnCollisionEnter2D(Collision2D other)
         {
+            hitCounter++;
             if (playerAttack)
             {
                 if (other.gameObject.CompareTag("Enemy"))
                 {
                     hitYet = true;
+                    if (hitCounter >= 3)
+                    {
+                       GetComponent<Enemy>().EnterState(Enemy.EnemyState.Airborn);
+                       hitCounter = 0;
+                    }
                     //other.gameObject.GetComponent<Enemy>().GetHit(this);
                 }
             }
