@@ -1935,10 +1935,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ebca56d2ee464860b1e9043435aa6b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  source: {fileID: 0}
+  source: {fileID: 1839424988}
   clips:
-  - name: block
-    clip: {fileID: 8300000, guid: 6fc172b057ba64cbaa782dcac855bc9d, type: 3}
   - name: punched
     clip: {fileID: 8300000, guid: ed8c84aa90cc5485e8034bc585f16aaf, type: 3}
   - name: kicked
@@ -1947,6 +1945,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 5d64d7c1c1ce04c0c98e47529d1b7605, type: 3}
   - name: kickwhiff
     clip: {fileID: 8300000, guid: 98fd0c6eb8ce44031bc90e669a6e4ebd, type: 3}
+  - name: block
+    clip: {fileID: 8300000, guid: 6fc172b057ba64cbaa782dcac855bc9d, type: 3}
 --- !u!82 &1839424988
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2259,7 +2259,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2085239038}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -2451,12 +2451,12 @@ PrefabInstance:
     - target: {fileID: 5726919291639318440, guid: 9d3faf4b05c934848acca26b3f699cbe,
         type: 3}
       propertyPath: m_Size.x
-      value: 1.781008
+      value: 1.2296108
       objectReference: {fileID: 0}
     - target: {fileID: 5726919291639318440, guid: 9d3faf4b05c934848acca26b3f699cbe,
         type: 3}
       propertyPath: m_Size.y
-      value: 5.9984493
+      value: 1.1934195
       objectReference: {fileID: 0}
     - target: {fileID: 5726919291639318440, guid: 9d3faf4b05c934848acca26b3f699cbe,
         type: 3}
@@ -2471,12 +2471,12 @@ PrefabInstance:
     - target: {fileID: 5726919291639318440, guid: 9d3faf4b05c934848acca26b3f699cbe,
         type: 3}
       propertyPath: m_Offset.x
-      value: -0.115620255
+      value: -0.39131886
       objectReference: {fileID: 0}
     - target: {fileID: 5726919291639318440, guid: 9d3faf4b05c934848acca26b3f699cbe,
         type: 3}
       propertyPath: m_Offset.y
-      value: 3.1562014
+      value: 3.353129
       objectReference: {fileID: 0}
     - target: {fileID: 5726919291639318440, guid: 9d3faf4b05c934848acca26b3f699cbe,
         type: 3}
@@ -2642,22 +2642,22 @@ PrefabInstance:
     - target: {fileID: 1888343834434734947, guid: fd189b5b806677742890e9c2626279ff,
         type: 3}
       propertyPath: m_Offset.x
-      value: -0.8777426
+      value: -0.87774235
       objectReference: {fileID: 0}
     - target: {fileID: 1888343834434734947, guid: fd189b5b806677742890e9c2626279ff,
         type: 3}
       propertyPath: m_Size.x
-      value: 1.6626734
+      value: 1.3284932
       objectReference: {fileID: 0}
     - target: {fileID: 1888343834434734947, guid: fd189b5b806677742890e9c2626279ff,
         type: 3}
       propertyPath: m_Offset.y
-      value: 2.734631
+      value: 2.5675402
       objectReference: {fileID: 0}
     - target: {fileID: 1888343834434734947, guid: fd189b5b806677742890e9c2626279ff,
         type: 3}
       propertyPath: m_Size.y
-      value: 5.6115694
+      value: 1.4343204
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd189b5b806677742890e9c2626279ff, type: 3}
