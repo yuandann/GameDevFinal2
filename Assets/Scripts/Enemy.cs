@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
         
         private GameObject hitfx;
         private SpriteRenderer SR;
+        private SpriteRenderer shadow;
         public int hitCount;
 
         public bool active, vulnerable;
@@ -41,6 +42,7 @@ public class Enemy : MonoBehaviour
             myState = EnemyState.Idle;
             pc = GameObject.FindWithTag("Player").GetComponent<PlayerManager>();
             SR = GetComponent<SpriteRenderer>();
+            shadow = GameObject.Find("enemyshadow").GetComponent<SpriteRenderer>();
         }
     
         // Update is called once per frame
@@ -70,10 +72,14 @@ public class Enemy : MonoBehaviour
                     break;
                 case EnemyState.Walking:
                     if (pc.transform.position.x > transform.position.x && !SR.flipX)
+                    {
                         SR.flipX = true;
+                        shadow.flipX = true;
+                    }
                     else if (pc.transform.position.x < transform.position.x && SR.flipX)
                     {
                         SR.flipX = false;
+                        shadow.flipX = false;
                     }
                     if (myAnim.GetCurrentAnimatorStateInfo(0).IsName("Attack") == false && Mathf.Abs(pc.transform.position.x - transform.position.x) <= myAttack.horizontalRange &&
                         Mathf.Abs(pc.transform.position.y - transform.position.y) <= myAttack.verticalRange)

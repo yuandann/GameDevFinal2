@@ -1958,7 +1958,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -2388,6 +2388,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6407524977783145472, guid: 9d3faf4b05c934848acca26b3f699cbe,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.363
+      objectReference: {fileID: 0}
+    - target: {fileID: 6407524977783145472, guid: 9d3faf4b05c934848acca26b3f699cbe,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.87491965
+      objectReference: {fileID: 0}
+    - target: {fileID: 2158226502973657130, guid: 9d3faf4b05c934848acca26b3f699cbe,
+        type: 3}
+      propertyPath: m_Name
+      value: shadow
+      objectReference: {fileID: 0}
     - target: {fileID: 5726919291639318453, guid: 9d3faf4b05c934848acca26b3f699cbe,
         type: 3}
       propertyPath: m_Name
@@ -2482,6 +2497,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5726919291639318440, guid: 9d3faf4b05c934848acca26b3f699cbe,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.pivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5726919291639318442, guid: 9d3faf4b05c934848acca26b3f699cbe,
         type: 3}
@@ -2673,6 +2693,11 @@ PrefabInstance:
         type: 3}
       propertyPath: idleMax
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4465656414428524163, guid: fd189b5b806677742890e9c2626279ff,
+        type: 3}
+      propertyPath: m_Name
+      value: shadow
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd189b5b806677742890e9c2626279ff, type: 3}

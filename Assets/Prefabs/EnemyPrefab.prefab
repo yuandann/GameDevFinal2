@@ -255,6 +255,7 @@ MonoBehaviour:
   fallSpeed: 0
   currentHP: 0
   maxHP: 10
+  hitCount: 0
   active: 0
   vulnerable: 0
   myState: 0
@@ -276,7 +277,6 @@ MonoBehaviour:
   endlagTime: 0
   horizontalKB: 0
   damage: 5
-  hitCounter: 0
   hitBox: {fileID: 1888343834434734947}
   horizontalRange: 3
   verticalRange: 3
