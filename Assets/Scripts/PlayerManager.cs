@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Timers;
+using TMPro;
 using UnityEngine;
 [RequireComponent(typeof(CharacterManager))]
 public class PlayerManager : MonoBehaviour
@@ -9,37 +10,37 @@ public class PlayerManager : MonoBehaviour
     public float Player_speed = 1;
     private bool face_left=false;
 
-    public AudioSource punchwhiff;
-    public AudioSource kickwhiff;
+    public int maxHp = 100;
+    public int currentHp;
+    public TMP_Text hpCount;
+    public int hitCount=0;
 
     private int punchcombo = 0;
     private int kickcombo=0;
 
     private bool canhit = true;
+    private float hitStunTimer;
 
     private Animator PlayerAnim;
+
+    public Enemy enemy;
     // Start is called before the first frame update
     void Start()
     {
         CM = GetComponent<CharacterManager>();
         PlayerAnim = GetComponent<Animator>();
-        
-
+        currentHp = maxHp;
+        enemy = GameObject.FindWithTag("Enemy").GetComponent<Enemy>();
         //Player_speed = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
-
-
-        //CheckHitbox();
-        //Debug.Log(transform.position.x +"  "+ (CM.ma.position.x - CM.ma.rect.width / 2));
-        //move
-        if (!PlayerAnim.GetBool("InCombat"))
-        {
-
-        }
+        hitStunTimer--;
+        if(hitStunTimer <=0)
+            PlayerAnim.SetBool("GotHit",false);
+        
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             if (!CM.SR.flipX)
@@ -77,14 +78,14 @@ public class PlayerManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z))
         {
             StartCombo();
+          //  CheckHitBoxAll();
             //CM.SR.color = Color.red;
-            CheckHitBoxAll();
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
             StartCombo();
+           // CheckHitBoxAll();
             //CM.SR.color = Color.red;
-            CheckHitBoxAll();
         }
  
         
@@ -177,27 +178,29 @@ public class PlayerManager : MonoBehaviour
         if(boxResult.Length == 0)
         {
                 if (Input.GetKeyDown(KeyCode.Z))
-                    punchwhiff.Play();
+                    AudioManager.instance.PlayClip("punchwhiff");
                 else if (Input.GetKeyDown(KeyCode.X))
-                    kickwhiff.Play(); 
+                    AudioManager.instance.PlayClip("kickwhiff");
         }
-
-        if (boxResult != null)
-        {
-
-            //Debug.Log(boxResult.collider.name);
-            //if (boxResult.collider.CompareTag("Enemy"))
+        for (int i = 0; i < boxResult.Length; i++){
+            if (boxResult[i].collider != null)
             {
-                //CharacterManager[] tmp = boxResult.collider.GetComponents<CharacterManager>();
-                for (int i = 0; i < boxResult.Length; i++)
-                {
-                    CharacterManager tmp = boxResult[i].collider.GetComponent<CharacterManager>();
-                    tmp.life--;
-                    tmp.GetComponent<Enemy>().GetHit(this.GetComponent<AttackScript>());
-                    tmp.Checklife();
-                }
+                CharacterManager tmp = boxResult[i].collider.GetComponent<CharacterManager>();
+                tmp.life--;
+                tmp.GetComponent<Enemy>().GetHit(GetComponent<AttackScript>());
+                tmp.Checklife();
+               
             }
         }
 
+    }
+
+    public void GetHit(AttackScript hitBy)
+    {
+        print("ow");
+        currentHp-=hitBy.damage;
+        PlayerAnim.SetBool("GotHit",true);
+        hitStunTimer = 120;
+        AudioManager.instance.PlayClip("punched");
     }
 }

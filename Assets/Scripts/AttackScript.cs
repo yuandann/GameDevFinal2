@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +19,9 @@ public class AttackScript : MonoBehaviour
         public float horizontalKB;
 
         public int damage;
+
+        private PlayerManager player;
+        private Enemy enemy;
     
         public BoxCollider2D hitBox;
     
@@ -28,7 +32,12 @@ public class AttackScript : MonoBehaviour
         public bool hitYet; //set to true on hit, so you don't hit the player multiple times
     
         public Vector2 attackRange;
-    
+
+        private void Start()
+        {
+            enemy = GetComponent<Enemy>();
+        }
+
         public void OnCollisionEnter2D(Collision2D other)
         {
             if (playerAttack)
@@ -45,6 +54,7 @@ public class AttackScript : MonoBehaviour
                 {
                     hitYet = true;
                 }
+                
             }
         }
 }

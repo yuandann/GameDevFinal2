@@ -21,8 +21,10 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 21300000, guid: 94dc9fdebd9c74cdcbb9d3d1660d9148, type: 3}
-    - time: 0.16666667
+    - time: 0.25
       value: {fileID: 21300000, guid: 3eb754a38a78b4f3285ea97d7661b375, type: 3}
+    - time: 0.8333333
+      value: {fileID: 21300000, guid: 94dc9fdebd9c74cdcbb9d3d1660d9148, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -44,12 +46,13 @@ AnimationClip:
     pptrCurveMapping:
     - {fileID: 21300000, guid: 94dc9fdebd9c74cdcbb9d3d1660d9148, type: 3}
     - {fileID: 21300000, guid: 3eb754a38a78b4f3285ea97d7661b375, type: 3}
+    - {fileID: 21300000, guid: 94dc9fdebd9c74cdcbb9d3d1660d9148, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.25
+    m_StopTime: 0.9166666
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -68,4 +71,11 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.25
+    functionName: CheckHitBox
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

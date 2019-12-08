@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using UnityEngine;
 [RequireComponent(typeof(CharacterManager))]
 public class Enemy : MonoBehaviour
@@ -12,9 +13,9 @@ public class Enemy : MonoBehaviour
         public float currentHP, maxHP;
         
         private GameObject hitfx;
-        private AudioSource punchfx;
-        private AudioSource kickfx;
-    
+        private SpriteRenderer SR;
+        public int hitCount;
+
         public bool active, vulnerable;
         public enum EnemyState
         {
@@ -37,28 +38,30 @@ public class Enemy : MonoBehaviour
             maxHP = GetComponent<CharacterManager>().life; //HP is called "life" in CharacterManager, setting this up to link with Enemy script
             currentHP = maxHP;
             hitfx = GetComponent<CharacterManager>().hitfx;
-            punchfx = GetComponent<CharacterManager>().punch;
-           kickfx = GetComponent<CharacterManager>().kick;
             myState = EnemyState.Idle;
             pc = GameObject.FindWithTag("Player").GetComponent<PlayerManager>();
+            SR = GetComponent<SpriteRenderer>();
         }
     
         // Update is called once per frame
         void FixedUpdate()
         {
+
             switch (myState)
             {
                 case EnemyState.Idle:
                     idleTimer--;
                     if (idleTimer <= 0)
                     {
-                        if (Mathf.Abs(pc.transform.position.x - transform.position.x) <= myAttack.horizontalRange &&
+                        if (myAnim.GetCurrentAnimatorStateInfo(0).IsName("Attack") == false && Mathf.Abs(pc.transform.position.x - transform.position.x) <= myAttack.horizontalRange &&
                             Mathf.Abs(pc.transform.position.y - transform.position.y) <= myAttack.verticalRange)
                         {
-                            EnterState(EnemyState.AttackStartup);
-                            myState = EnemyState.AttackStartup;
-                            startupTimer = myAttack.startupTime;
+                            EnterState(EnemyState.AttackActive);
+                            myState = EnemyState.AttackActive;
+                            activeTimer = myAttack.activeTime;
                         }
+                        else if(hitCount>=3)
+                            EnterState(EnemyState.Airborn);
                         else
                         {
                             EnterState(EnemyState.Walking);
@@ -66,11 +69,19 @@ public class Enemy : MonoBehaviour
                     }
                     break;
                 case EnemyState.Walking:
-                    if (Mathf.Abs(pc.transform.position.x - transform.position.x) <= myAttack.horizontalRange &&
+                    if (pc.transform.position.x > transform.position.x && !SR.flipX)
+                        SR.flipX = true;
+                    else if (pc.transform.position.x < transform.position.x && SR.flipX)
+                    {
+                        SR.flipX = false;
+                    }
+                    if (myAnim.GetCurrentAnimatorStateInfo(0).IsName("Attack") == false && Mathf.Abs(pc.transform.position.x - transform.position.x) <= myAttack.horizontalRange &&
                         Mathf.Abs(pc.transform.position.y - transform.position.y) <= myAttack.verticalRange)
                     {
                         EnterState(EnemyState.AttackActive);
                     }
+                    else if(hitCount>=3)
+                        EnterState(EnemyState.Airborn);
                     else
                     {
                         //original code:
@@ -105,21 +116,22 @@ public class Enemy : MonoBehaviour
 //                    }
 //                    break;
                 case EnemyState.HitStun:
-                    hitStunTimer--;
-                    Debug.Log("Ouch");
-                    if (hitStunTimer <= 0)
+                    if (hitCount >= 3)
                     {
-                        EnterState(EnemyState.Idle);
+                        EnterState(EnemyState.Airborn);
+                        hitCount = 0;
                     }
+                    else
+                    {
+                        hitStunTimer--;
+                        if (hitStunTimer <= 0)
+                        {
+                            EnterState(EnemyState.Idle);
+                        }
+                    }
+
                     break;
                 case EnemyState.Airborn:
-                    transform.Translate(transform.position.x, transform.position.y - fallSpeed, transform.position.x);
-                    if (transform.position.y <= groundLevel)
-                    {
-                        EnterState(EnemyState.Prone);
-                    }
-                    break;
-                case EnemyState.Prone:
                     proneTimer--;
                     if (proneTimer <= 0)
                     {
@@ -156,30 +168,60 @@ public class Enemy : MonoBehaviour
                     activeTimer = myAttack.startupTime;
                     break;
                 case EnemyState.HitStun:
+                    hitCount++;
                     myAnim.Play("HitStun");
                     break;
                 case EnemyState.Airborn:
-                    groundLevel = transform.position.x;
-                    myAnim.Play("Airborne");
-                    break;
-                case EnemyState.Prone:
                     vulnerable = false;
-                    myAnim.Play("Prone");
                     proneTimer = proneMax;
+                    myAnim.Play("Fall");
                     break;
+//                case EnemyState.Prone:
+//                    vulnerable = false;
+//                    myAnim.Play("Prone");
+//                    proneTimer = proneMax;
+//                    break;
                 case EnemyState.Dying:
                     myAnim.Play("Dying");
                     dyingTimer = 30;
                     break;
             }
         }
-    
+
+        private void CheckHitBox()
+        {
+            RaycastHit2D[] boxResult;
+            if(SR.flipX)
+                boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), new Vector2(1, 4), 0f,
+                new Vector2(-1, 0), 1.5f, 1 << 8);
+            else
+                boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), 
+                    new Vector2(1, 4), 0f, new Vector2(1, 0), 1.5f, 1 << 8);
+            if(boxResult.Length==0 && !AudioManager.instance.source.isPlaying)
+                AudioManager.instance.PlayClip("punchwhiff");
+            if (boxResult != null)
+            {
+                for (int i = 0; i < boxResult.Length; i++)
+                {
+                    CharacterManager tmp = boxResult[i].collider.GetComponent<CharacterManager>();
+
+                    if (tmp.GetComponent<PlayerManager>() != null)
+                    {
+                        tmp.life--;
+                        tmp.Checklife();
+                        tmp.GetComponent<PlayerManager>().GetHit(GetComponent<AttackScript>());
+                    }
+
+                }
+            }
+        }
+
         public void GetHit(AttackScript hitBy)
         {
             if (Input.GetKeyDown(KeyCode.Z))
-                punchfx.Play();
+                AudioManager.instance.PlayClip("punched");
             else if(Input.GetKeyDown(KeyCode.X))
-                kickfx.Play();
+                AudioManager.instance.PlayClip("kicked");
             currentHP -= hitBy.damage;
             var particlepos = new Vector2(transform.position.x-1.2f,transform.position.y +3);
             var hitfxclone = Instantiate(hitfx, particlepos, Quaternion.identity);
