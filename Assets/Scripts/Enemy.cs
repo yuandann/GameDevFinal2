@@ -194,6 +194,36 @@ public class Enemy : MonoBehaviour
             }
         }
 
+        private void FakeCheckHitBox()
+        {
+            if (SR.flipX)
+            {
+                if(pc.gameObject.GetComponent<CharacterManager>().SR.flipX)
+                {
+                    Debug.Log("hit!");
+                    pc.GetHit(GetComponent<AttackScript>());
+                }
+                else
+                {
+                    Debug.Log("miss!");
+                    AudioManager.instance.PlayClip("punchwhiff");
+                }
+            }
+            else
+            {
+                if(!pc.gameObject.GetComponent<CharacterManager>().SR.flipX)
+                {
+                    Debug.Log("hit!");
+                    pc.GetHit(GetComponent<AttackScript>());
+                }
+                else
+                {
+                    Debug.Log("miss!");
+                    AudioManager.instance.PlayClip("punchwhiff");
+                }
+            }
+        }
+
         private void CheckHitBox()
         {
             RaycastHit2D[] boxResult;
@@ -203,9 +233,13 @@ public class Enemy : MonoBehaviour
             else
                 boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), 
                     new Vector2(1, 4), 0f, new Vector2(1, 0), 1.5f, 1 << 8);
-            if(boxResult.Length==0 && !AudioManager.instance.source.isPlaying)
+            Debug.Log(boxResult.Length);
+            if (boxResult.Length == 0 && !AudioManager.instance.source.isPlaying)
+            {
                 AudioManager.instance.PlayClip("punchwhiff");
-            if (boxResult != null)
+                Debug.Log("Enemy Punch Whiffed");
+            }
+            if (boxResult.Length > 0)
             {
                 for (int i = 0; i < boxResult.Length; i++)
                 {
@@ -222,12 +256,24 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        public void GetHit(AttackScript hitBy)
+        public void GetHit(AttackScript hitBy, bool punched)
         {
+            if (punched)
+            {
+                AudioManager.instance.PlayClip("punched");
+                Debug.Log("Enemy hit by punch");
+            }
+            else
+            {
+                AudioManager.instance.PlayClip("kicked");
+                Debug.Log("Enemy hit by kick");
+            }
+            /*
             if (Input.GetKeyDown(KeyCode.Z))
                 AudioManager.instance.PlayClip("punched");
             else if(Input.GetKeyDown(KeyCode.X))
-                AudioManager.instance.PlayClip("kicked");
+                AudioManager.instance.PlayClip("kicked");*/
+            Debug.Log(punched);
             currentHP -= hitBy.damage;
             var particlepos = new Vector2(transform.position.x-1.2f,transform.position.y +3);
             var hitfxclone = Instantiate(hitfx, particlepos, Quaternion.identity);
