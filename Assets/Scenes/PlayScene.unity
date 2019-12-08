@@ -2493,6 +2493,11 @@ PrefabInstance:
       propertyPath: maxHp
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6755291987612291541, guid: 9d3faf4b05c934848acca26b3f699cbe,
+        type: 3}
+      propertyPath: life
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 8573114238068735146, guid: 9d3faf4b05c934848acca26b3f699cbe,
         type: 3}
       propertyPath: m_Sprite
@@ -2642,12 +2647,12 @@ PrefabInstance:
     - target: {fileID: 1888343834434734947, guid: fd189b5b806677742890e9c2626279ff,
         type: 3}
       propertyPath: m_Offset.x
-      value: -0.87774235
+      value: -0.8587466
       objectReference: {fileID: 0}
     - target: {fileID: 1888343834434734947, guid: fd189b5b806677742890e9c2626279ff,
         type: 3}
       propertyPath: m_Size.x
-      value: 1.3284932
+      value: 1.974347
       objectReference: {fileID: 0}
     - target: {fileID: 1888343834434734947, guid: fd189b5b806677742890e9c2626279ff,
         type: 3}
@@ -2658,6 +2663,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Size.y
       value: 1.4343204
+      objectReference: {fileID: 0}
+    - target: {fileID: 4678876336703830018, guid: fd189b5b806677742890e9c2626279ff,
+        type: 3}
+      propertyPath: proneMax
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4678876336703830018, guid: fd189b5b806677742890e9c2626279ff,
+        type: 3}
+      propertyPath: idleMax
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd189b5b806677742890e9c2626279ff, type: 3}

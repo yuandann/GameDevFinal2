@@ -13,6 +13,7 @@ public class PlayerManager : MonoBehaviour
     public int maxHp = 100;
     public int currentHp;
     public TMP_Text hpCount;
+    public int hitCount=0;
 
     private int punchcombo = 0;
     private int kickcombo=0;
@@ -21,12 +22,15 @@ public class PlayerManager : MonoBehaviour
     private float hitStunTimer;
 
     private Animator PlayerAnim;
+
+    public Enemy enemy;
     // Start is called before the first frame update
     void Start()
     {
         CM = GetComponent<CharacterManager>();
         PlayerAnim = GetComponent<Animator>();
         currentHp = maxHp;
+        enemy = GameObject.FindWithTag("Enemy").GetComponent<Enemy>();
         //Player_speed = 1;
     }
 
@@ -74,14 +78,14 @@ public class PlayerManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z))
         {
             StartCombo();
+          //  CheckHitBoxAll();
             //CM.SR.color = Color.red;
-            CheckHitBoxAll();
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
             StartCombo();
+           // CheckHitBoxAll();
             //CM.SR.color = Color.red;
-            CheckHitBoxAll();
         }
  
         
@@ -183,8 +187,9 @@ public class PlayerManager : MonoBehaviour
             {
                 CharacterManager tmp = boxResult[i].collider.GetComponent<CharacterManager>();
                 tmp.life--;
-                tmp.GetComponent<Enemy>().GetHit(this.GetComponent<AttackScript>());
+                tmp.GetComponent<Enemy>().GetHit(GetComponent<AttackScript>());
                 tmp.Checklife();
+               
             }
         }
 
@@ -192,6 +197,7 @@ public class PlayerManager : MonoBehaviour
 
     public void GetHit(AttackScript hitBy)
     {
+        print("ow");
         currentHp-=hitBy.damage;
         PlayerAnim.SetBool("GotHit",true);
         hitStunTimer = 120;

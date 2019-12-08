@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,7 +20,8 @@ public class AttackScript : MonoBehaviour
 
         public int damage;
 
-        public int hitCounter;
+        private PlayerManager player;
+        private Enemy enemy;
     
         public BoxCollider2D hitBox;
     
@@ -30,20 +32,19 @@ public class AttackScript : MonoBehaviour
         public bool hitYet; //set to true on hit, so you don't hit the player multiple times
     
         public Vector2 attackRange;
-    
+
+        private void Start()
+        {
+            enemy = GetComponent<Enemy>();
+        }
+
         public void OnCollisionEnter2D(Collision2D other)
         {
-            hitCounter++;
             if (playerAttack)
             {
                 if (other.gameObject.CompareTag("Enemy"))
                 {
                     hitYet = true;
-                    if (hitCounter >= 3)
-                    {
-                       GetComponent<Enemy>().EnterState(Enemy.EnemyState.Airborn);
-                       hitCounter = 0;
-                    }
                     //other.gameObject.GetComponent<Enemy>().GetHit(this);
                 }
             }
@@ -53,6 +54,7 @@ public class AttackScript : MonoBehaviour
                 {
                     hitYet = true;
                 }
+                
             }
         }
 }

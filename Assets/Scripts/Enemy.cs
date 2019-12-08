@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using UnityEngine;
 [RequireComponent(typeof(CharacterManager))]
 public class Enemy : MonoBehaviour
@@ -12,6 +13,8 @@ public class Enemy : MonoBehaviour
         public float currentHP, maxHP;
         
         private GameObject hitfx;
+        private SpriteRenderer SR;
+        public int hitCount;
 
         public bool active, vulnerable;
         public enum EnemyState
@@ -37,11 +40,13 @@ public class Enemy : MonoBehaviour
             hitfx = GetComponent<CharacterManager>().hitfx;
             myState = EnemyState.Idle;
             pc = GameObject.FindWithTag("Player").GetComponent<PlayerManager>();
+            SR = GetComponent<SpriteRenderer>();
         }
     
         // Update is called once per frame
         void FixedUpdate()
         {
+
             switch (myState)
             {
                 case EnemyState.Idle:
@@ -55,6 +60,8 @@ public class Enemy : MonoBehaviour
                             myState = EnemyState.AttackActive;
                             activeTimer = myAttack.activeTime;
                         }
+                        else if(hitCount>=3)
+                            EnterState(EnemyState.Airborn);
                         else
                         {
                             EnterState(EnemyState.Walking);
@@ -62,11 +69,19 @@ public class Enemy : MonoBehaviour
                     }
                     break;
                 case EnemyState.Walking:
+                    if (pc.transform.position.x > transform.position.x && !SR.flipX)
+                        SR.flipX = true;
+                    else if (pc.transform.position.x < transform.position.x && SR.flipX)
+                    {
+                        SR.flipX = false;
+                    }
                     if (myAnim.GetCurrentAnimatorStateInfo(0).IsName("Attack") == false && Mathf.Abs(pc.transform.position.x - transform.position.x) <= myAttack.horizontalRange &&
                         Mathf.Abs(pc.transform.position.y - transform.position.y) <= myAttack.verticalRange)
                     {
                         EnterState(EnemyState.AttackActive);
                     }
+                    else if(hitCount>=3)
+                        EnterState(EnemyState.Airborn);
                     else
                     {
                         //original code:
@@ -88,7 +103,6 @@ public class Enemy : MonoBehaviour
 //                    break;
                 case EnemyState.AttackActive:
                     activeTimer--;
-                    CheckHitBox();
                     if (activeTimer <= 0)
                     {
                         EnterState(EnemyState.Idle);
@@ -102,21 +116,22 @@ public class Enemy : MonoBehaviour
 //                    }
 //                    break;
                 case EnemyState.HitStun:
-                    hitStunTimer--;
-                    //Debug.Log("Ouch");
-                    if (hitStunTimer <= 0)
+                    if (hitCount >= 3)
                     {
-                        EnterState(EnemyState.Idle);
+                        EnterState(EnemyState.Airborn);
+                        hitCount = 0;
                     }
+                    else
+                    {
+                        hitStunTimer--;
+                        if (hitStunTimer <= 0)
+                        {
+                            EnterState(EnemyState.Idle);
+                        }
+                    }
+
                     break;
                 case EnemyState.Airborn:
-                    transform.Translate(transform.position.x, transform.position.y - fallSpeed, transform.position.x);
-                    if (transform.position.y <= groundLevel)
-                    {
-                        EnterState(EnemyState.Prone);
-                    }
-                    break;
-                case EnemyState.Prone:
                     proneTimer--;
                     if (proneTimer <= 0)
                     {
@@ -153,11 +168,12 @@ public class Enemy : MonoBehaviour
                     activeTimer = myAttack.startupTime;
                     break;
                 case EnemyState.HitStun:
+                    hitCount++;
                     myAnim.Play("HitStun");
                     break;
                 case EnemyState.Airborn:
                     vulnerable = false;
-                    groundLevel = transform.position.x;
+                    proneTimer = proneMax;
                     myAnim.Play("Fall");
                     break;
 //                case EnemyState.Prone:
@@ -175,19 +191,28 @@ public class Enemy : MonoBehaviour
         private void CheckHitBox()
         {
             RaycastHit2D[] boxResult;
-            boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), new Vector2(3, 4), 0f,
-                new Vector2(1, 0), 1.5f, 1 << 8);
-            for (int i = 0; i < boxResult.Length; i++)
+            if(SR.flipX)
+                boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), new Vector2(1, 4), 0f,
+                new Vector2(-1, 0), 1.5f, 1 << 8);
+            else
+                boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), 
+                    new Vector2(1, 4), 0f, new Vector2(1, 0), 1.5f, 1 << 8);
+            if(boxResult.Length==0 && !AudioManager.instance.source.isPlaying)
+                AudioManager.instance.PlayClip("punchwhiff");
+            if (boxResult != null)
             {
-                print(boxResult[i].collider.name);
-                if (boxResult[i].collider != null && boxResult[i].collider.CompareTag("Player"))
+                for (int i = 0; i < boxResult.Length; i++)
                 {
-                    pc = boxResult[i].collider.GetComponent<PlayerManager>();
-                    pc.currentHp--;
-                    pc.GetComponent<PlayerManager>().GetHit(GetComponent<AttackScript>());
+                    CharacterManager tmp = boxResult[i].collider.GetComponent<CharacterManager>();
+
+                    if (tmp.GetComponent<PlayerManager>() != null)
+                    {
+                        tmp.life--;
+                        tmp.Checklife();
+                        tmp.GetComponent<PlayerManager>().GetHit(GetComponent<AttackScript>());
+                    }
+
                 }
-                else
-                    AudioManager.instance.PlayClip("punchwhiff");
             }
         }
 
