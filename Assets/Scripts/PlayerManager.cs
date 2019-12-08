@@ -168,26 +168,45 @@ public class PlayerManager : MonoBehaviour
     }
     
 
-    private void CheckHitBoxAll()
+    private void CheckHitBoxAll(int type)//0 for punch, 1 for kick
     {
         RaycastHit2D[] boxResult;
         if (face_left)
             boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), new Vector2(1, 4), 0f, new Vector2(-1, 0), 1.5f, 1 << 8);
         else
             boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), new Vector2(1, 4), 0f, new Vector2(1, 0), 1.5f, 1 << 8);
+        Debug.Log(boxResult.Length);
         if(boxResult.Length == 0)
         {
-                if (Input.GetKeyDown(KeyCode.Z))
-                    AudioManager.instance.PlayClip("punchwhiff");
-                else if (Input.GetKeyDown(KeyCode.X))
-                    AudioManager.instance.PlayClip("kickwhiff");
+            if (type == 0)
+            {
+                AudioManager.instance.PlayClip("punchwhiff");
+                Debug.Log("Punch Whiffed");
+            }
+            else if(type == 1)
+            {
+                AudioManager.instance.PlayClip("kickwhiff");
+                Debug.Log("Kick Whiffed");
+            }
         }
         for (int i = 0; i < boxResult.Length; i++){
             if (boxResult[i].collider != null)
             {
+                bool tempPunchedBool;
                 CharacterManager tmp = boxResult[i].collider.GetComponent<CharacterManager>();
                 tmp.life--;
-                tmp.GetComponent<Enemy>().GetHit(GetComponent<AttackScript>());
+                if (type == 0)
+                {
+                    tempPunchedBool = true;
+                    tmp.GetComponent<Enemy>().GetHit(GetComponent<AttackScript>(), tempPunchedBool);
+                    Debug.Log(tempPunchedBool);
+                }
+                else if (type == 1)
+                {
+                    tempPunchedBool = false;
+                    tmp.GetComponent<Enemy>().GetHit(GetComponent<AttackScript>(), tempPunchedBool);
+                    Debug.Log(tempPunchedBool);
+                }
                 tmp.Checklife();
                
             }
@@ -198,7 +217,10 @@ public class PlayerManager : MonoBehaviour
     public void GetHit(AttackScript hitBy)
     {
         print("ow");
+        Debug.Log(hitBy.name + " " + hitBy.damage);
+        GetComponent<CharacterManager>().life -= hitBy.damage;
         currentHp-=hitBy.damage;
+        hpCount.text = currentHp.ToString();
         PlayerAnim.SetBool("GotHit",true);
         hitStunTimer = 120;
         AudioManager.instance.PlayClip("punched");

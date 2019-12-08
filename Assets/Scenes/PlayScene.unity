@@ -2491,6 +2491,11 @@ PrefabInstance:
     - target: {fileID: 5726919291639318442, guid: 9d3faf4b05c934848acca26b3f699cbe,
         type: 3}
       propertyPath: maxHp
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5726919291639318442, guid: 9d3faf4b05c934848acca26b3f699cbe,
+        type: 3}
+      propertyPath: currentHp
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6755291987612291541, guid: 9d3faf4b05c934848acca26b3f699cbe,
@@ -2673,6 +2678,11 @@ PrefabInstance:
         type: 3}
       propertyPath: idleMax
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9159078557980758302, guid: fd189b5b806677742890e9c2626279ff,
+        type: 3}
+      propertyPath: name
+      value: Fucksky Punch
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd189b5b806677742890e9c2626279ff, type: 3}
