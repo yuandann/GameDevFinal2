@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Timers;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance = null;
     [SerializeField]
     private GameObject upper_scene;
     [SerializeField]
@@ -33,6 +35,11 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
+        
         offset = Camera.transform.position - player.transform.position; 
     }
 
@@ -109,6 +116,24 @@ public class GameManager : MonoBehaviour
             Camera.transform.localPosition = Vector3.Lerp(StartPosition, EndPosition, Lerping);
             yield return null;
         }
+    }
+
+    public IEnumerator ScreenShake()
+    {
+        Vector3 originalPos = Camera.transform.localPosition;
+        float shaketime = 10f;
+        if (shaketime > 0f)
+        {
+            shaketime -= Time.deltaTime;
+            Camera.transform.localPosition = originalPos + Random.insideUnitSphere * 0.7f;
+        }
+        else
+        {
+            shaketime = 0f;
+            Camera.transform.localPosition = originalPos;
+            yield return null;
+        }
+
     }
 
     IEnumerator CameraPositionRecalibration()

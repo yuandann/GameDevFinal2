@@ -5,13 +5,13 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterManager))]
 public class Enemy : MonoBehaviour
 {
-    public PlayerManager pc;
+        public PlayerManager pc;
         public AttackScript myAttack;
         public Animator myAnim;
         public int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer;
         public float groundLevel, fallSpeed;
         public float currentHP, maxHP;
-        
+
         private GameObject hitfx;
         private SpriteRenderer SR;
         private SpriteRenderer shadow;
@@ -42,7 +42,6 @@ public class Enemy : MonoBehaviour
             myState = EnemyState.Idle;
             pc = GameObject.FindWithTag("Player").GetComponent<PlayerManager>();
             SR = GetComponent<SpriteRenderer>();
-            shadow = GameObject.Find("enemyshadow").GetComponent<SpriteRenderer>();
         }
     
         // Update is called once per frame
@@ -74,20 +73,20 @@ public class Enemy : MonoBehaviour
                     if (pc.transform.position.x > transform.position.x && !SR.flipX)
                     {
                         SR.flipX = true;
-                        shadow.flipX = true;
                     }
                     else if (pc.transform.position.x < transform.position.x && SR.flipX)
                     {
                         SR.flipX = false;
-                        shadow.flipX = false;
                     }
                     if (myAnim.GetCurrentAnimatorStateInfo(0).IsName("Attack") == false && Mathf.Abs(pc.transform.position.x - transform.position.x) <= myAttack.horizontalRange &&
                         Mathf.Abs(pc.transform.position.y - transform.position.y) <= myAttack.verticalRange)
                     {
                         EnterState(EnemyState.AttackActive);
                     }
-                    else if(hitCount>=3)
+                    else if (hitCount >= 3)
+                    {
                         EnterState(EnemyState.Airborn);
+                    }
                     else
                     {
                         //original code:
@@ -139,6 +138,7 @@ public class Enemy : MonoBehaviour
                     break;
                 case EnemyState.Airborn:
                     proneTimer--;
+                    GameManager.instance.ScreenShake();
                     if (proneTimer <= 0)
                     {
                         vulnerable = true;

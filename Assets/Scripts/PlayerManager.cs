@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Timers;
+using System.Xml.XPath;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+
 [RequireComponent(typeof(CharacterManager))]
 public class PlayerManager : MonoBehaviour
 {
@@ -23,6 +26,10 @@ public class PlayerManager : MonoBehaviour
 
     private Animator PlayerAnim;
 
+    public Image playericon;
+    public Sprite iconnormal;
+    public Sprite iconhit;
+
     public Enemy enemy;
     // Start is called before the first frame update
     void Start()
@@ -31,6 +38,7 @@ public class PlayerManager : MonoBehaviour
         PlayerAnim = GetComponent<Animator>();
         currentHp = maxHp;
         enemy = GameObject.FindWithTag("Enemy").GetComponent<Enemy>();
+        playericon.sprite = iconnormal;
         //Player_speed = 1;
     }
 
@@ -38,8 +46,11 @@ public class PlayerManager : MonoBehaviour
     void Update()
     {
         hitStunTimer--;
-        if(hitStunTimer <=0)
+        if (hitStunTimer <= 0)
+        {
             PlayerAnim.SetBool("GotHit",false);
+            playericon.sprite = iconnormal;
+        }
         
         if (Input.GetKey(KeyCode.LeftArrow))
         {
@@ -221,8 +232,25 @@ public class PlayerManager : MonoBehaviour
         GetComponent<CharacterManager>().life -= hitBy.damage;
         currentHp-=hitBy.damage;
         hpCount.text = currentHp.ToString();
-        PlayerAnim.SetBool("GotHit",true);
+        playericon.sprite = iconhit;
         hitStunTimer = 120;
         AudioManager.instance.PlayClip("punched");
+        if (hitCount < 3)
+        {
+            PlayerAnim.SetBool("GotHit", true);
+            hitCount++;
+        }
+        else
+        {
+            PlayerAnim.SetBool("GotHit", false);
+            PlayerAnim.SetBool("KnockedDown", true);
+            hitCount = 0;
+        }
     }
+
+    private void CheckLife()
+    {
+        
+    }
+    
 }
