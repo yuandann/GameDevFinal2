@@ -210,7 +210,7 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        private void FakeCheckHitBox()
+     /*   private void FakeCheckHitBox()
         {
             if (SR.flipX)
             {
@@ -239,7 +239,7 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
-
+*/
         private void CheckHitBox()
         {
             RaycastHit2D[] boxResult;
@@ -284,11 +284,6 @@ public class Enemy : MonoBehaviour
                 AudioManager.instance.PlayClip("kicked");
                 Debug.Log("Enemy hit by kick");
             }
-            /*
-            if (Input.GetKeyDown(KeyCode.Z))
-                AudioManager.instance.PlayClip("punched");
-            else if(Input.GetKeyDown(KeyCode.X))
-                AudioManager.instance.PlayClip("kicked");*/
             Debug.Log(punched);
             currentHP -= hitBy.damage;
             var particlepos = new Vector2(transform.position.x-1.2f,transform.position.y +3);

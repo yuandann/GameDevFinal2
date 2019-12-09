@@ -7,6 +7,7 @@ public class CharacterManager : MonoBehaviour
     public int life;
     public int Type;
     public SpriteRenderer SR;
+    public Transform shadow;
     public GameObject hitfx;
     
     //[SerializeField]
@@ -19,14 +20,24 @@ public class CharacterManager : MonoBehaviour
     void Start()
     {
         SR = GetComponent<SpriteRenderer>();
-        
+        shadow = GameObject.Find("shadow").GetComponent<Transform>();
+
         //ma = move_area.GetComponent<RectTransform>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        var shadowRotation = shadow.rotation;
+        if (SR.flipX)
+        {
+            shadowRotation.z *= 180;
+            shadow.rotation = shadowRotation; 
+        }
+        else
+        {
+            shadow.rotation = shadowRotation;
+        }
     }
     public void Checklife()
     {

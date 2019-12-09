@@ -51,6 +51,7 @@ public class PlayerManager : MonoBehaviour
         if (hitStunTimer <= 0)
         {
             PlayerAnim.SetBool("GotHit",false);
+            PlayerAnim.SetBool("KnockedDown",false);
             playericon.sprite = iconnormal;
         }
         
@@ -244,7 +245,7 @@ public class PlayerManager : MonoBehaviour
             PlayerAnim.SetBool("GotHit", true);
             hitCount++;
         }
-        else
+        else if (hitCount ==3)
         {
             PlayerAnim.SetBool("GotHit", false);
             PlayerAnim.SetBool("KnockedDown", true);
