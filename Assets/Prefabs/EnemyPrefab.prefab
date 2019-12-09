@@ -251,8 +251,11 @@ MonoBehaviour:
   idleMax: 0
   proneMax: 0
   dyingTimer: 0
+  walkTimer: 0
+  attackCooldown: 0
   groundLevel: 0
   fallSpeed: 0
+  walkSpeed: 0
   currentHP: 0
   maxHP: 10
   hitCount: 0
@@ -276,10 +279,11 @@ MonoBehaviour:
   activeTime: 50
   endlagTime: 0
   horizontalKB: 0
-  damage: 5
+  damage: 2
   hitBox: {fileID: 1888343834434734947}
   horizontalRange: 3
   verticalRange: 3
   playerAttack: 0
   hitYet: 0
   attackRange: {x: 0, y: 0}
+  name: 

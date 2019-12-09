@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Timers;
-using System.Xml.XPath;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,9 +19,11 @@ public class PlayerManager : MonoBehaviour
 
     private int punchcombo = 0;
     private int kickcombo=0;
+    private bool canMove;
 
     private bool canhit = true;
     private float hitStunTimer;
+    public float hitStunMax;
 
     private Animator PlayerAnim;
 
@@ -34,6 +35,7 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        canMove = true;
         CM = GetComponent<CharacterManager>();
         PlayerAnim = GetComponent<Animator>();
         currentHp = maxHp;
@@ -52,7 +54,7 @@ public class PlayerManager : MonoBehaviour
             playericon.sprite = iconnormal;
         }
         
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow) && canMove)
         {
             if (!CM.SR.flipX)
             {
@@ -61,7 +63,7 @@ public class PlayerManager : MonoBehaviour
             }
             transform.Translate(Time.deltaTime * Player_speed * Vector2.left);
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow) && canMove)
         {
             if (CM.SR.flipX)
             {
@@ -70,11 +72,11 @@ public class PlayerManager : MonoBehaviour
             }
             transform.Translate(Time.deltaTime * Player_speed * Vector2.right);
         }
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.UpArrow) && canMove)
         {
             transform.Translate(Time.deltaTime * Player_speed * Vector2.up);
         }
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.DownArrow) && canMove)
         {
             transform.Translate(Time.deltaTime * Player_speed * Vector2.down);
         }
@@ -225,6 +227,18 @@ public class PlayerManager : MonoBehaviour
 
     }
 
+    public void AffectMovement(int canMoveOrNo) //0 for yes, 1 for no
+    {
+        if (canMoveOrNo == 0)
+        {
+            canMove = true;
+        }
+        else if (canMoveOrNo == 1)
+        {
+            canMove = false;
+        }
+    }
+
     public void GetHit(AttackScript hitBy)
     {
         print("ow");
@@ -233,7 +247,8 @@ public class PlayerManager : MonoBehaviour
         currentHp-=hitBy.damage;
         hpCount.text = currentHp.ToString();
         playericon.sprite = iconhit;
-        hitStunTimer = 120;
+        hitStunTimer = hitStunMax;
+        PlayerAnim.SetBool("GotHit",true);
         AudioManager.instance.PlayClip("punched");
         if (hitCount < 3)
         {
