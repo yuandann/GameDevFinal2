@@ -1581,7 +1581,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -5
-  m_Sprite: {fileID: 21300000, guid: 911d80967ab704603a0b457a0b9d6fd9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4c657d033c19246b3b27ec2181694f2d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1600,7 +1600,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1192984313}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 35.03, y: -1.21, z: 0}
+  m_LocalPosition: {x: 35.128, y: -1.213, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2760,12 +2760,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 89ec404cbf23c4f3ea876a52639857b9,
         type: 3}
-    - target: {fileID: 4450905072292099950, guid: 9d3faf4b05c934848acca26b3f699cbe,
+    - target: {fileID: 1108122046008477469, guid: 9d3faf4b05c934848acca26b3f699cbe,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1108122046008477469, guid: 9d3faf4b05c934848acca26b3f699cbe,
+    - target: {fileID: 4450905072292099950, guid: 9d3faf4b05c934848acca26b3f699cbe,
         type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -2920,6 +2920,11 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 1.4343204
       objectReference: {fileID: 0}
+    - target: {fileID: 1888343834434734947, guid: fd189b5b806677742890e9c2626279ff,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 6.43
+      objectReference: {fileID: 0}
     - target: {fileID: 4678876336703830018, guid: fd189b5b806677742890e9c2626279ff,
         type: 3}
       propertyPath: proneMax
@@ -2934,6 +2939,26 @@ PrefabInstance:
         type: 3}
       propertyPath: name
       value: Fucksky Punch
+      objectReference: {fileID: 0}
+    - target: {fileID: 950711860827127690, guid: fd189b5b806677742890e9c2626279ff,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.92884
+      objectReference: {fileID: 0}
+    - target: {fileID: 950711860827127690, guid: fd189b5b806677742890e9c2626279ff,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 950711860827127690, guid: fd189b5b806677742890e9c2626279ff,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 950711860827127690, guid: fd189b5b806677742890e9c2626279ff,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8984848
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd189b5b806677742890e9c2626279ff, type: 3}
