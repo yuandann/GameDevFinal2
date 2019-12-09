@@ -138,16 +138,10 @@ public class PlayerManager : MonoBehaviour
             canhit = true;
             punchcombo = 0;
         }
-        else if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_punch1") && punchcombo >= 2)
+        else if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_punch1") && punchcombo == 2)
         {
             PlayerAnim.SetInteger("PunchCombo",2);
             canhit = true;
-        }
-        else if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_punch2") && punchcombo > 2)
-        {
-            PlayerAnim.SetInteger("PunchCombo",1);
-            canhit = true;
-            punchcombo = 1;
         }
         else if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_punch2"))
         {
@@ -161,17 +155,12 @@ public class PlayerManager : MonoBehaviour
             canhit = true;
             kickcombo = 0;
         }
-        else if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_kick1") && kickcombo >= 2)
+        else if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_kick1") && kickcombo == 2)
         {
             PlayerAnim.SetInteger("KickCombo",2);
             canhit = true;
         }
-        else if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_kick2") && kickcombo > 2)
-        {
-            PlayerAnim.SetInteger("KickCombo",1);
-            canhit = true;
-            kickcombo = 1;
-        }
+        
         else if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_kick2"))
         {
             PlayerAnim.SetInteger("KickCombo",0);

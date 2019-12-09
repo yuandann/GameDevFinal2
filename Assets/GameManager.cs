@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator ScreenShake()
     {
         Vector3 originalPos = Camera.transform.localPosition;
-        float shaketime = 10f;
+        float shaketime = 1f;
         if (shaketime > 0f)
         {
             shaketime -= Time.deltaTime;

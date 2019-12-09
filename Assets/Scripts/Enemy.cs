@@ -151,7 +151,7 @@ public class Enemy : MonoBehaviour
                     break;
                 case EnemyState.Airborn:
                     proneTimer--;
-                    GameManager.instance.ScreenShake();
+                    StartCoroutine(GameManager.instance.ScreenShake());
                     if (proneTimer <= 0)
                     {
                         vulnerable = true;
