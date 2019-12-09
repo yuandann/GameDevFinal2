@@ -8,8 +8,8 @@ public class Enemy : MonoBehaviour
     public PlayerManager pc;
         public AttackScript myAttack;
         public Animator myAnim;
-        public int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer;
-        public float groundLevel, fallSpeed;
+        public int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer, walkTimer;
+        public float groundLevel, fallSpeed, walkSpeed;
         public float currentHP, maxHP;
         
         private GameObject hitfx;
@@ -41,6 +41,7 @@ public class Enemy : MonoBehaviour
             myState = EnemyState.Idle;
             pc = GameObject.FindWithTag("Player").GetComponent<PlayerManager>();
             SR = GetComponent<SpriteRenderer>();
+            walkSpeed = Random.Range(0.01f, 0.035f);
         }
     
         // Update is called once per frame
@@ -69,8 +70,14 @@ public class Enemy : MonoBehaviour
                     }
                     break;
                 case EnemyState.Walking:
+                    if (walkTimer <= 0)
+                    {
+                        EnterState(EnemyState.Idle);
+                    }
                     if (pc.transform.position.x > transform.position.x && !SR.flipX)
+                    {
                         SR.flipX = true;
+                    }
                     else if (pc.transform.position.x < transform.position.x && SR.flipX)
                     {
                         SR.flipX = false;
@@ -92,6 +99,7 @@ public class Enemy : MonoBehaviour
                         //transform.Translate(Time.fixedDeltaTime*(pc.transform.position - transform.position)/5);
                         //new code:
                         transform.position = Vector3.MoveTowards(transform.position, pc.transform.position, 0.025f);
+                        walkTimer--;
                     }
                     break;
 //                case EnemyState.AttackStartup:
@@ -160,6 +168,7 @@ public class Enemy : MonoBehaviour
                     break;
                 case EnemyState.Walking:
                     myAnim.Play("Walking");
+                    walkTimer = Random.Range(90, 240);
                     break;
                 case EnemyState.AttackActive:
                     myAnim.Play("Attack");
