@@ -189,7 +189,7 @@ public class Enemy : MonoBehaviour
         }
 
         private void FakeCheckHitBox()
-        {
+        {/*
             if (SR.flipX)
             {
                 if(pc.gameObject.GetComponent<CharacterManager>().SR.flipX)
@@ -215,7 +215,7 @@ public class Enemy : MonoBehaviour
                     Debug.Log("miss!");
                     AudioManager.instance.PlayClip("punchwhiff");
                 }
-            }
+            }*/
         }
 
         private void CheckHitBox()
