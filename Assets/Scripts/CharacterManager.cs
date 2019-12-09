@@ -19,6 +19,7 @@ public class CharacterManager : MonoBehaviour
     void Start()
     {
         SR = GetComponent<SpriteRenderer>();
+        
         //ma = move_area.GetComponent<RectTransform>();
     }
 

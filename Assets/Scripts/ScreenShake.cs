@@ -24,7 +24,7 @@ public class ScreenShake : MonoBehaviour
         }
     }
 	
-    void OnEnable()
+    public void StartShake()
     {
         originalPos = camTransform.localPosition;
     }

@@ -133,9 +133,13 @@ MonoBehaviour:
   CM: {fileID: 6755291987612291541}
   Player_speed: 4
   maxHp: 100
+  currentHp: 0
   hpCount: {fileID: 0}
-  punchwhiff: {fileID: 0}
-  kickwhiff: {fileID: 0}
+  hitCount: 0
+  playericon: {fileID: 0}
+  iconnormal: {fileID: 21300000, guid: 9792023d147c94daa8960c21c310e2ac, type: 3}
+  iconhit: {fileID: 21300000, guid: 777fa4780bb9c4ae2970ff530a50fa49, type: 3}
+  enemy: {fileID: 0}
 --- !u!114 &6755291987612291541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,8 +155,6 @@ MonoBehaviour:
   life: 0
   Type: 0
   SR: {fileID: 0}
-  punch: {fileID: 0}
-  kick: {fileID: 0}
   hitfx: {fileID: 0}
 --- !u!212 &8573114238068735146
 SpriteRenderer:
@@ -287,10 +289,10 @@ MonoBehaviour:
   endlagTime: 0
   horizontalKB: 0
   damage: 1
-  hitCounter: 0
   hitBox: {fileID: 5726919291639318440}
   horizontalRange: 0
   verticalRange: 0
   playerAttack: 0
   hitYet: 0
   attackRange: {x: 0, y: 0}
+  name: 

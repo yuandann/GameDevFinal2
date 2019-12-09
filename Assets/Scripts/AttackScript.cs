@@ -32,6 +32,7 @@ public class AttackScript : MonoBehaviour
         public bool hitYet; //set to true on hit, so you don't hit the player multiple times
     
         public Vector2 attackRange;
+        public string name;
 
         private void Start()
         {

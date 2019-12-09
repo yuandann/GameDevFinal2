@@ -5,15 +5,16 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterManager))]
 public class Enemy : MonoBehaviour
 {
-    public PlayerManager pc;
+        public PlayerManager pc;
         public AttackScript myAttack;
         public Animator myAnim;
-        public int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer;
-        public float groundLevel, fallSpeed;
+        public int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer, walkTimer, attackCooldown;
+        public float groundLevel, fallSpeed, walkSpeed;
         public float currentHP, maxHP;
-        
+
         private GameObject hitfx;
         private SpriteRenderer SR;
+        private SpriteRenderer shadow;
         public int hitCount;
 
         public bool active, vulnerable;
@@ -41,12 +42,17 @@ public class Enemy : MonoBehaviour
             myState = EnemyState.Idle;
             pc = GameObject.FindWithTag("Player").GetComponent<PlayerManager>();
             SR = GetComponent<SpriteRenderer>();
+            walkSpeed = Random.Range(0.01f, 0.035f);
+            attackCooldown = 0;
         }
     
         // Update is called once per frame
         void FixedUpdate()
         {
-
+            if (attackCooldown > 0)
+            {
+                attackCooldown--;
+            }
             switch (myState)
             {
                 case EnemyState.Idle:
@@ -56,7 +62,10 @@ public class Enemy : MonoBehaviour
                         if (myAnim.GetCurrentAnimatorStateInfo(0).IsName("Attack") == false && Mathf.Abs(pc.transform.position.x - transform.position.x) <= myAttack.horizontalRange &&
                             Mathf.Abs(pc.transform.position.y - transform.position.y) <= myAttack.verticalRange)
                         {
-                            EnterState(EnemyState.AttackActive);
+                            if (attackCooldown <= 0)
+                            {
+                                EnterState(EnemyState.AttackActive);
+                            }
                             myState = EnemyState.AttackActive;
                             activeTimer = myAttack.activeTime;
                         }
@@ -69,8 +78,14 @@ public class Enemy : MonoBehaviour
                     }
                     break;
                 case EnemyState.Walking:
+                    if (walkTimer <= 0)
+                    {
+                        EnterState(EnemyState.Idle);
+                    }
                     if (pc.transform.position.x > transform.position.x && !SR.flipX)
+                    {
                         SR.flipX = true;
+                    }
                     else if (pc.transform.position.x < transform.position.x && SR.flipX)
                     {
                         SR.flipX = false;
@@ -80,8 +95,10 @@ public class Enemy : MonoBehaviour
                     {
                         EnterState(EnemyState.AttackActive);
                     }
-                    else if(hitCount>=3)
+                    else if (hitCount >= 3)
+                    {
                         EnterState(EnemyState.Airborn);
+                    }
                     else
                     {
                         //original code:
@@ -92,6 +109,7 @@ public class Enemy : MonoBehaviour
                         //transform.Translate(Time.fixedDeltaTime*(pc.transform.position - transform.position)/5);
                         //new code:
                         transform.position = Vector3.MoveTowards(transform.position, pc.transform.position, 0.025f);
+                        walkTimer--;
                     }
                     break;
 //                case EnemyState.AttackStartup:
@@ -133,6 +151,7 @@ public class Enemy : MonoBehaviour
                     break;
                 case EnemyState.Airborn:
                     proneTimer--;
+                    StartCoroutine(GameManager.instance.ScreenShake());
                     if (proneTimer <= 0)
                     {
                         vulnerable = true;
@@ -151,6 +170,7 @@ public class Enemy : MonoBehaviour
     
         public void EnterState(EnemyState endState)
         {
+            Debug.Log(endState);
             myState = endState;
             switch (endState)
             {
@@ -160,12 +180,14 @@ public class Enemy : MonoBehaviour
                     break;
                 case EnemyState.Walking:
                     myAnim.Play("Walking");
+                    walkTimer = Random.Range(90, 240);
                     break;
                 case EnemyState.AttackActive:
                     myAnim.Play("Attack");
                     myAttack.enabled = true;
                     myAttack.hitYet = false;
                     activeTimer = myAttack.startupTime;
+                    attackCooldown = 120;
                     break;
                 case EnemyState.HitStun:
                     hitCount++;
@@ -188,6 +210,36 @@ public class Enemy : MonoBehaviour
             }
         }
 
+        private void FakeCheckHitBox()
+        {
+            if (SR.flipX)
+            {
+                if(pc.gameObject.GetComponent<CharacterManager>().SR.flipX)
+                {
+                    Debug.Log("hit!");
+                    pc.GetHit(GetComponent<AttackScript>());
+                }
+                else
+                {
+                    Debug.Log("miss!");
+                    AudioManager.instance.PlayClip("punchwhiff");
+                }
+            }
+            else
+            {
+                if(!pc.gameObject.GetComponent<CharacterManager>().SR.flipX)
+                {
+                    Debug.Log("hit!");
+                    pc.GetHit(GetComponent<AttackScript>());
+                }
+                else
+                {
+                    Debug.Log("miss!");
+                    AudioManager.instance.PlayClip("punchwhiff");
+                }
+            }
+        }
+
         private void CheckHitBox()
         {
             RaycastHit2D[] boxResult;
@@ -197,9 +249,13 @@ public class Enemy : MonoBehaviour
             else
                 boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), 
                     new Vector2(1, 4), 0f, new Vector2(1, 0), 1.5f, 1 << 8);
-            if(boxResult.Length==0 && !AudioManager.instance.source.isPlaying)
+            Debug.Log(boxResult.Length);
+            if (boxResult.Length == 0 && !AudioManager.instance.source.isPlaying)
+            {
                 AudioManager.instance.PlayClip("punchwhiff");
-            if (boxResult != null)
+                Debug.Log("Enemy Punch Whiffed");
+            }
+            if (boxResult.Length > 0)
             {
                 for (int i = 0; i < boxResult.Length; i++)
                 {
@@ -216,12 +272,24 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        public void GetHit(AttackScript hitBy)
+        public void GetHit(AttackScript hitBy, bool punched)
         {
+            if (punched)
+            {
+                AudioManager.instance.PlayClip("punched");
+                Debug.Log("Enemy hit by punch");
+            }
+            else
+            {
+                AudioManager.instance.PlayClip("kicked");
+                Debug.Log("Enemy hit by kick");
+            }
+            /*
             if (Input.GetKeyDown(KeyCode.Z))
                 AudioManager.instance.PlayClip("punched");
             else if(Input.GetKeyDown(KeyCode.X))
-                AudioManager.instance.PlayClip("kicked");
+                AudioManager.instance.PlayClip("kicked");*/
+            Debug.Log(punched);
             currentHP -= hitBy.damage;
             var particlepos = new Vector2(transform.position.x-1.2f,transform.position.y +3);
             var hitfxclone = Instantiate(hitfx, particlepos, Quaternion.identity);
