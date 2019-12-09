@@ -2498,6 +2498,11 @@ PrefabInstance:
       propertyPath: currentHp
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5726919291639318442, guid: 9d3faf4b05c934848acca26b3f699cbe,
+        type: 3}
+      propertyPath: hitStunMax
+      value: 45
+      objectReference: {fileID: 0}
     - target: {fileID: 6755291987612291541, guid: 9d3faf4b05c934848acca26b3f699cbe,
         type: 3}
       propertyPath: life

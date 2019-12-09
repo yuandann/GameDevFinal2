@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     public PlayerManager pc;
         public AttackScript myAttack;
         public Animator myAnim;
-        public int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer, walkTimer;
+        public int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer, walkTimer, attackCooldown;
         public float groundLevel, fallSpeed, walkSpeed;
         public float currentHP, maxHP;
         
@@ -42,12 +42,16 @@ public class Enemy : MonoBehaviour
             pc = GameObject.FindWithTag("Player").GetComponent<PlayerManager>();
             SR = GetComponent<SpriteRenderer>();
             walkSpeed = Random.Range(0.01f, 0.035f);
+            attackCooldown = 0;
         }
     
         // Update is called once per frame
         void FixedUpdate()
         {
-
+            if (attackCooldown > 0)
+            {
+                attackCooldown--;
+            }
             switch (myState)
             {
                 case EnemyState.Idle:
@@ -57,7 +61,10 @@ public class Enemy : MonoBehaviour
                         if (myAnim.GetCurrentAnimatorStateInfo(0).IsName("Attack") == false && Mathf.Abs(pc.transform.position.x - transform.position.x) <= myAttack.horizontalRange &&
                             Mathf.Abs(pc.transform.position.y - transform.position.y) <= myAttack.verticalRange)
                         {
-                            EnterState(EnemyState.AttackActive);
+                            if (attackCooldown <= 0)
+                            {
+                                EnterState(EnemyState.AttackActive);
+                            }
                             myState = EnemyState.AttackActive;
                             activeTimer = myAttack.activeTime;
                         }
@@ -159,6 +166,7 @@ public class Enemy : MonoBehaviour
     
         public void EnterState(EnemyState endState)
         {
+            Debug.Log(endState);
             myState = endState;
             switch (endState)
             {
@@ -175,6 +183,7 @@ public class Enemy : MonoBehaviour
                     myAttack.enabled = true;
                     myAttack.hitYet = false;
                     activeTimer = myAttack.startupTime;
+                    attackCooldown = 120;
                     break;
                 case EnemyState.HitStun:
                     hitCount++;
@@ -198,7 +207,7 @@ public class Enemy : MonoBehaviour
         }
 
         private void FakeCheckHitBox()
-        {/*
+        {
             if (SR.flipX)
             {
                 if(pc.gameObject.GetComponent<CharacterManager>().SR.flipX)
@@ -224,7 +233,7 @@ public class Enemy : MonoBehaviour
                     Debug.Log("miss!");
                     AudioManager.instance.PlayClip("punchwhiff");
                 }
-            }*/
+            }
         }
 
         private void CheckHitBox()
