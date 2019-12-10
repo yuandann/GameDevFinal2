@@ -20,23 +20,28 @@ public class CharacterManager : MonoBehaviour
     void Start()
     {
         SR = GetComponent<SpriteRenderer>();
-        shadow = GameObject.Find("shadow").GetComponent<Transform>();
+        shadow = transform.Find("shadow").GetComponent<Transform>();
 
         //ma = move_area.GetComponent<RectTransform>();
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        var shadowRotation = shadow.rotation;
+        var shadowRotation = shadow.localRotation;
+        var shadowPosition = shadow.localPosition;
         if (SR.flipX)
         {
-            shadowRotation.z *= 180;
-            shadow.rotation = shadowRotation; 
+            print("flip");
+            shadowRotation.y = 180;
+;            shadowPosition.x *= -1;
+            shadow.localRotation = shadowRotation;
+            shadow.localPosition = shadowPosition;
         }
         else
         {
-            shadow.rotation = shadowRotation;
+            shadow.localRotation = shadowRotation;
+            shadow.localPosition = shadowPosition;
         }
     }
     public void Checklife()
