@@ -34,7 +34,6 @@ public class CharacterManager : MonoBehaviour
         var shadowPosition = shadow.localPosition;
         if (SR.flipX)
         {
-            print("flip");
             shadowRotation.y = 180;
 ;            shadowPosition.x *= -1;
             shadow.localRotation = shadowRotation;
@@ -51,9 +50,5 @@ public class CharacterManager : MonoBehaviour
         print(life);
         Debug.Log(this.name+" Life: "+ life);
     }
-
-    public void DestroyThis()
-    {
-        Object.Destroy(this.gameObject);
-    }
+    
 }

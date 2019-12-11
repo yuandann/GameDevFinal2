@@ -16,6 +16,7 @@ public class PlayerManager : MonoBehaviour
     public int currentHp;
     public TMP_Text hpCount;
     public int hitCount=0;
+    public Animator cooldownicon;
 
     private int punchcombo = 0;
     private int kickcombo=0;
@@ -24,6 +25,8 @@ public class PlayerManager : MonoBehaviour
     private bool canhit = true;
     private float hitStunTimer;
     public float hitStunMax;
+    private float cooldowntime=0;
+    private int comboCount=0;
 
     private Animator PlayerAnim;
 
@@ -47,6 +50,9 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+     
+        CheckLife();
+        
         hitStunTimer--;
         if (hitStunTimer <= 0)
         {
@@ -54,7 +60,14 @@ public class PlayerManager : MonoBehaviour
             PlayerAnim.SetBool("KnockedDown",false);
             playericon.sprite = iconnormal;
         }
-        
+
+        cooldowntime--;
+        if (cooldowntime <= 0)
+        {
+            canhit = true;
+            cooldownicon.SetBool("active",true);
+        }
+   
         if (Input.GetKey(KeyCode.LeftArrow) && canMove)
         {
             if (!CM.SR.flipX)
@@ -112,6 +125,17 @@ public class PlayerManager : MonoBehaviour
 
     private void StartCombo()
     {
+        print(comboCount);
+        if(comboCount<3)
+            comboCount++;
+        if (comboCount == 3)
+        {
+            canhit = false;
+            cooldowntime = 70;
+            cooldownicon.SetBool("active",false);
+            comboCount = 0;
+        }
+        
         if (canhit && Input.GetKeyDown(KeyCode.Z))
         {
             punchcombo++;
@@ -131,7 +155,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void CheckCombo()
     {
-        canhit = false;
+        //canhit = false;
         
         if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_punch1") && punchcombo == 1)
         {
@@ -258,13 +282,12 @@ public class PlayerManager : MonoBehaviour
     {
         if (currentHp<= 0)
         {
-            PlayerAnim.SetBool("Dead",true);
+            canMove = false;
+            PlayerAnim.SetTrigger("Dead");
             PlayerAnim.SetBool("KnockedDown", false);
             PlayerAnim.SetBool("GotHit", false);
-            
+            GameManager.instance.GameOver();
         }
-        else
-            PlayerAnim.SetBool("Dead",false);
     }
     
 }

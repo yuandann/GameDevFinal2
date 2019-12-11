@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Timers;
 using TMPro.EditorUtilities;
 using UnityEngine;
 [RequireComponent(typeof(CharacterManager))]
@@ -8,7 +9,7 @@ public class Enemy : MonoBehaviour
         public PlayerManager pc;
         public AttackScript myAttack;
         public Animator myAnim;
-        public int idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer, walkTimer, attackCooldown;
+        public float idleTimer, proneTimer, startupTimer, activeTimer, endlagTimer, hitStunTimer, idleMax, proneMax, dyingTimer, walkTimer, attackCooldown;
         public float groundLevel, fallSpeed, walkSpeed;
         public float currentHP, maxHP;
 
@@ -157,13 +158,6 @@ public class Enemy : MonoBehaviour
                         EnterState(EnemyState.Idle);
                     }
                     break;
-                case EnemyState.Dying:
-                    dyingTimer--;
-                    if (dyingTimer <= 0)
-                    {
-                        Destroy(gameObject);
-                    }
-                    break;
             }
         }
     
@@ -174,11 +168,11 @@ public class Enemy : MonoBehaviour
             switch (endState)
             {
                 case EnemyState.Idle:
-                    myAnim.Play("Idle");
+                    myAnim.Play("Idle"); 
                     idleTimer = idleMax;
                     break;
                 case EnemyState.Walking:
-                    myAnim.Play("Walking");
+                    myAnim.SetBool("walking",true);
                     walkTimer = Random.Range(90, 240);
                     break;
                 case EnemyState.AttackActive:
@@ -186,13 +180,13 @@ public class Enemy : MonoBehaviour
                     myAttack.enabled = true;
                     myAttack.hitYet = false;
                     activeTimer = myAttack.startupTime;
-                    attackCooldown = 120;
+                    attackCooldown = 50;
                     break;
                 case EnemyState.HitStun:
                     hitCount++;
                     myAnim.Play("HitStun");
                     break;
-                case EnemyState.Airborn:
+                case EnemyState.Airborn: 
                     GameManager.instance.ScreenShake();
                     vulnerable = false;
                     proneTimer = proneMax;
@@ -204,10 +198,15 @@ public class Enemy : MonoBehaviour
 //                    proneTimer = proneMax;
 //                    break;
                 case EnemyState.Dying:
-                    myAnim.Play("Dying");
-                    dyingTimer = 30;
+                    myAnim.SetBool("walking",false);
+                    myAnim.SetTrigger("Dead");
                     break;
             }
+        }
+
+        public void DestroyThis()
+        {
+            Destroy(gameObject);
         }
 
      /*   private void FakeCheckHitBox()
@@ -285,11 +284,22 @@ public class Enemy : MonoBehaviour
                 Debug.Log("Enemy hit by kick");
             }
             currentHP -= hitBy.damage;
+            print(currentHP);
             var particlepos = new Vector2(transform.position.x-1.2f,transform.position.y +3);
             var hitfxclone = Instantiate(hitfx, particlepos, Quaternion.identity);
             hitStunTimer = 120;
             EnterState(EnemyState.HitStun);
             Destroy(hitfxclone, 1f);
+            CheckLife();
+        }
+
+        private void CheckLife()
+        {
+            if (currentHP <= 0)
+            {
+                EnterState(EnemyState.Dying);
+                GameManager.instance.enemiesdefeated++;
+            }
         }
         
         

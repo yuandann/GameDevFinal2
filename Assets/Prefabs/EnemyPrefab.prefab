@@ -132,6 +132,7 @@ MonoBehaviour:
   life: 10
   Type: 0
   SR: {fileID: 0}
+  shadow: {fileID: 0}
   hitfx: {fileID: 2344894976480626663, guid: 5f17860dbcbb94f24ba3d52bc410f969, type: 3}
 --- !u!212 &6895839467582876074
 SpriteRenderer:
@@ -248,7 +249,7 @@ MonoBehaviour:
   activeTimer: 0
   endlagTimer: 0
   hitStunTimer: 0
-  idleMax: 0
+  idleMax: 5
   proneMax: 0
   dyingTimer: 0
   walkTimer: 0
