@@ -255,7 +255,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: player_fall
+  m_Name: fall
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -650,7 +650,7 @@ AnimatorStateMachine:
     m_Position: {x: 600, y: 220, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3704965384545817799}
-    m_Position: {x: 680, y: 60, z: 0}
+    m_Position: {x: 690, y: 40, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -446375495858451195}
     m_Position: {x: 460, y: -10, z: 0}

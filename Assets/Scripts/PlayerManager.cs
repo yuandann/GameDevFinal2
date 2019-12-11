@@ -25,7 +25,7 @@ public class PlayerManager : MonoBehaviour
 
     private bool canhit = true;
     private float hitStunTimer;
-    public float hitStunMax;
+    public float hitStunMax = 300;
     private float cooldowntime=0;
     private int comboCount=0;
 
@@ -58,12 +58,17 @@ public class PlayerManager : MonoBehaviour
         //         CheckLife();
         //     }
 
-     hitStunTimer--;
+        hitStunTimer--;
         if (hitStunTimer <= 0)
         {
             PlayerAnim.SetBool("GotHit",false);
             PlayerAnim.SetBool("KnockedDown",false);
             playericon.sprite = iconnormal;
+            canMove = true;
+        }
+        else
+        {
+            canMove = false;
         }
 
         cooldowntime--;
@@ -72,39 +77,48 @@ public class PlayerManager : MonoBehaviour
             canhit = true;
             cooldownicon.SetBool("active",true);
         }
-   
-        if (Input.GetKey(KeyCode.LeftArrow) && canMove)
-        {
-            if (!CM.SR.flipX)
-            {
-                CM.SR.flipX = true;
-                face_left = true;
-            }
-            transform.Translate(Time.deltaTime * Player_speed * Vector2.left);
-        }
-        if (Input.GetKey(KeyCode.RightArrow) && canMove)
-        {
-            if (CM.SR.flipX)
-            {
-                CM.SR.flipX = false;
-                face_left = false;
-            }
-            transform.Translate(Time.deltaTime * Player_speed * Vector2.right);
-        }
-        if (Input.GetKey(KeyCode.UpArrow) && canMove)
-        {
-            transform.Translate(Time.deltaTime * Player_speed * Vector2.up);
-        }
-        if (Input.GetKey(KeyCode.DownArrow) && canMove)
-        {
-            transform.Translate(Time.deltaTime * Player_speed * Vector2.down);
-        }
 
-        if(Input.GetKey(KeyCode.LeftArrow)||Input.GetKey(KeyCode.RightArrow)||Input.GetKey(KeyCode.UpArrow)||Input.GetKey(KeyCode.DownArrow))
-            PlayerAnim.SetBool("Walking",true);
-        else
+        if (canMove)
         {
-            PlayerAnim.SetBool("Walking",false);
+            if (Input.GetKey(KeyCode.LeftArrow) && canMove)
+            {
+                if (!CM.SR.flipX)
+                {
+                    CM.SR.flipX = true;
+                    face_left = true;
+                }
+
+                transform.Translate(Time.deltaTime * Player_speed * Vector2.left);
+            }
+
+            if (Input.GetKey(KeyCode.RightArrow) && canMove)
+            {
+                if (CM.SR.flipX)
+                {
+                    CM.SR.flipX = false;
+                    face_left = false;
+                }
+
+                transform.Translate(Time.deltaTime * Player_speed * Vector2.right);
+            }
+
+            if (Input.GetKey(KeyCode.UpArrow) && canMove)
+            {
+                transform.Translate(Time.deltaTime * Player_speed * Vector2.up);
+            }
+
+            if (Input.GetKey(KeyCode.DownArrow) && canMove)
+            {
+                transform.Translate(Time.deltaTime * Player_speed * Vector2.down);
+            }
+
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.UpArrow) ||
+                Input.GetKey(KeyCode.DownArrow))
+                PlayerAnim.SetBool("Walking", true);
+            else
+            {
+                PlayerAnim.SetBool("Walking", false);
+            }
         }
 
         if (Input.GetKey(KeyCode.LeftShift))
@@ -178,7 +192,7 @@ public class PlayerManager : MonoBehaviour
             canhit = true;
             punchcombo = 0;
         }
-        else if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_punch1") && punchcombo == 2)
+        else if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_punch1") && punchcombo >= 2)
         {
             PlayerAnim.SetInteger("PunchCombo",2);
             canhit = true;
@@ -195,7 +209,7 @@ public class PlayerManager : MonoBehaviour
             canhit = true;
             kickcombo = 0;
         }
-        else if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_kick1") && kickcombo == 2)
+        else if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_kick1") && kickcombo >= 2)
         {
             PlayerAnim.SetInteger("KickCombo",2);
             canhit = true;
@@ -278,9 +292,11 @@ public class PlayerManager : MonoBehaviour
             currentHp -= hitBy.damage - 2;
         else
             currentHp-=hitBy.damage;
-        hpCount.text = currentHp.ToString();
+        if(currentHp>=0)
+            hpCount.text = currentHp.ToString();
         playericon.sprite = iconhit;
         hitStunTimer = hitStunMax;
+        canMove = false;
         if (!blocking)
             PlayerAnim.SetBool("GotHit",true);
         AudioManager.instance.PlayClip("punched");

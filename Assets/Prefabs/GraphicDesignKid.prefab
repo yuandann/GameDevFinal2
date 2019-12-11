@@ -280,7 +280,7 @@ MonoBehaviour:
   activeTime: 50
   endlagTime: 0
   horizontalKB: 0
-  damage: 5
+  damage: 3
   hitBox: {fileID: 2764429668799208007}
   horizontalRange: 3
   verticalRange: 3

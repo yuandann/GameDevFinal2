@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Timers;
-using TMPro.EditorUtilities;
 using UnityEngine;
 [RequireComponent(typeof(CharacterManager))]
 public class Enemy : MonoBehaviour
@@ -207,6 +206,7 @@ public class Enemy : MonoBehaviour
         public void DestroyThis()
         {
             Destroy(gameObject);
+            GameManager.instance.enemiesdefeated++;
         }
 
      /*   private void FakeCheckHitBox()
@@ -298,7 +298,6 @@ public class Enemy : MonoBehaviour
             if (currentHP <= 0)
             {
                 EnterState(EnemyState.Dying);
-                GameManager.instance.enemiesdefeated++;
                 GameManager.instance.CheckWin();
             }
         }
