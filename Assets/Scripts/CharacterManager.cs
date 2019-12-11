@@ -50,12 +50,6 @@ public class CharacterManager : MonoBehaviour
     {
         print(life);
         Debug.Log(this.name+" Life: "+ life);
-        if (life <= 0)
-        {
-            thisanim.SetBool("Dead",true);
-        }
-        else
-            thisanim.SetBool("Dead",false);
     }
 
     public void DestroyThis()

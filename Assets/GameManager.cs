@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
     private bool Start_Making_Enemy = false;
     private bool recalibrate_camera = false;
 
+    private float shaketimer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +48,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        shaketimer--;
+        if (shaketimer <= 0)
+        {
+            Camera.GetComponent<Animator>().SetBool("shaking",false);
+        }
         //if(inCombat)
         //lockCamera();
         //EnemyInstantiation();
@@ -118,23 +125,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public IEnumerator ScreenShake()
+    public void ScreenShake()
     {
         print("shaking");
-        Vector3 originalPos = Camera.transform.localPosition;
-        float shaketime = 1f;
-        if (shaketime > 0f)
-        {
-            shaketime -= Time.deltaTime;
-            Camera.transform.localPosition = originalPos + Random.insideUnitSphere * 0.7f;
-        }
-        else
-        {
-            shaketime = 0f;
-            Camera.transform.localPosition = originalPos;
-            yield return null;
-        }
-
+        Camera.GetComponent<Animator>().SetBool("shaking",true);
+        shaketimer = 10;
     }
 
     IEnumerator CameraPositionRecalibration()

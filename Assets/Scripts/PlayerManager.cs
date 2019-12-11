@@ -231,6 +231,7 @@ public class PlayerManager : MonoBehaviour
 
     public void GetHit(AttackScript hitBy)
     {
+        CheckLife();
         print("ow");
         Debug.Log(hitBy.name + " " + hitBy.damage);
         GetComponent<CharacterManager>().life -= hitBy.damage;
@@ -255,7 +256,15 @@ public class PlayerManager : MonoBehaviour
 
     private void CheckLife()
     {
-        
+        if (currentHp<= 0)
+        {
+            PlayerAnim.SetBool("Dead",true);
+            PlayerAnim.SetBool("KnockedDown", false);
+            PlayerAnim.SetBool("GotHit", false);
+            
+        }
+        else
+            PlayerAnim.SetBool("Dead",false);
     }
     
 }

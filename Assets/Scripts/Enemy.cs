@@ -69,7 +69,7 @@ public class Enemy : MonoBehaviour
                             myState = EnemyState.AttackActive;
                             activeTimer = myAttack.activeTime;
                         }
-                        else if(hitCount>=3)
+                        else if(hitCount==3)
                             EnterState(EnemyState.Airborn);
                         else
                         {
@@ -95,7 +95,7 @@ public class Enemy : MonoBehaviour
                     {
                         EnterState(EnemyState.AttackActive);
                     }
-                    else if (hitCount >= 3)
+                    else if (hitCount == 3)
                     {
                         EnterState(EnemyState.Airborn);
                     }
@@ -151,7 +151,6 @@ public class Enemy : MonoBehaviour
                     break;
                 case EnemyState.Airborn:
                     proneTimer--;
-                    StartCoroutine(GameManager.instance.ScreenShake());
                     if (proneTimer <= 0)
                     {
                         vulnerable = true;
@@ -194,6 +193,7 @@ public class Enemy : MonoBehaviour
                     myAnim.Play("HitStun");
                     break;
                 case EnemyState.Airborn:
+                    GameManager.instance.ScreenShake();
                     vulnerable = false;
                     proneTimer = proneMax;
                     myAnim.Play("Fall");

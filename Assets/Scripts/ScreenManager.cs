@@ -21,7 +21,11 @@ public class ScreenManager : MonoBehaviour
     
     public void ChangeScene()
     {
-        SceneManager.LoadScene("PlayScene");
+        var currentScene = SceneManager.GetActiveScene();
+        if(currentScene == SceneManager.GetSceneByBuildIndex(0))
+         SceneManager.LoadScene("IntroScene");
+        else if (currentScene == SceneManager.GetSceneByBuildIndex(1))
+            SceneManager.LoadScene("PlayScene");
     }
     
     
