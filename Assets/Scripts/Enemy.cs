@@ -243,11 +243,11 @@ public class Enemy : MonoBehaviour
         {
             RaycastHit2D[] boxResult;
             if(SR.flipX)
-                boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), new Vector2(1, 4), 0f,
-                new Vector2(-1, 0), 1.5f, 1 << 8);
+                boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), new Vector2(4, 4), 0f,
+                new Vector2(1, 0), 2.5f);
             else
                 boxResult = Physics2D.BoxCastAll(gameObject.transform.position + new Vector3(0, 3f), 
-                    new Vector2(1, 4), 0f, new Vector2(1, 0), 1.5f, 1 << 8);
+                    new Vector2(4, 4), 0f, new Vector2(-1, 0), 2.5f);
             Debug.Log(boxResult.Length);
             if (boxResult.Length == 0 && !AudioManager.instance.source.isPlaying)
             {

@@ -52,11 +52,11 @@ public class PlayerManager : MonoBehaviour
     void Update()
     {
      //testing
-     if (Input.GetKeyDown(KeyCode.Space))
-     {
-         currentHp = 0;
-         CheckLife();
-     }
+//     if (Input.GetKeyDown(KeyCode.Space))
+        //     {
+        //         currentHp = 0;
+        //         CheckLife();
+        //     }
 
      hitStunTimer--;
         if (hitStunTimer <= 0)
