@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class ScreenManager : MonoBehaviour
 {
-    public Button StartButton;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,8 +20,14 @@ public class ScreenManager : MonoBehaviour
     
     public void ChangeScene()
     {
-        SceneManager.LoadScene("PlayScene");
+        var currentScene = SceneManager.GetActiveScene();
+        if(currentScene == SceneManager.GetSceneByBuildIndex(0))
+         SceneManager.LoadScene("IntroScene");
+        else if (currentScene == SceneManager.GetSceneByBuildIndex(1))
+            SceneManager.LoadScene("PlayScene");
+        else if (currentScene == SceneManager.GetSceneByBuildIndex(2))
+            SceneManager.LoadScene("EndCutscene");
     }
-    
-    
+
+
 }

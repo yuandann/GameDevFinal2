@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Timers;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,11 +15,17 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject player;
     public GameObject Camera;
+    public Transform cameraParent;
     private Vector3 offset;
+
+    public int enemiesdefeated;
+    private int instantiatecount;
 
     public GameObject Instantiator1;
     public GameObject Instantiator2;
     public GameObject Detector;
+    public Animator gameoverpanel;
+    public Animator winpanel;
 
     public GameObject[] EnemyList;
 
@@ -32,6 +40,8 @@ public class GameManager : MonoBehaviour
     private bool Start_Making_Enemy = false;
     private bool recalibrate_camera = false;
 
+    private float shaketimer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,12 +50,20 @@ public class GameManager : MonoBehaviour
         else
             Destroy(gameObject);
         
-        offset = Camera.transform.position - player.transform.position; 
+        offset = cameraParent.position - player.transform.position; 
     }
 
     // Update is called once per frame
     void Update()
     {
+//        if(Input.GetKeyDown(KeyCode.Space))
+//            winpanel.SetTrigger("fadein");
+        shaketimer--;
+        if (shaketimer <= 0)
+        {
+            Camera.GetComponent<Animator>().SetBool("shaking",false);
+        }
+    
         //if(inCombat)
         //lockCamera();
         //EnemyInstantiation();
@@ -100,45 +118,35 @@ public class GameManager : MonoBehaviour
     }
     void CameraFollow()
     {
-        Camera.transform.position = player.transform.position + offset;
+        cameraParent.position = player.transform.position + offset;
     }
 
     //this will later change to ienumerator for smooth animation
     IEnumerator CombatCameraPositionFix()
     {
-        Vector3 StartPosition = Camera.transform.localPosition;
-        Vector3 EndPosition = new Vector3(Camera.transform.localPosition.x, 0f, -10);
+        Vector3 StartPosition = cameraParent.localPosition;
+        Vector3 EndPosition = new Vector3(cameraParent.localPosition.x, 0f, -10);
         //while (Camera.transform.position.y <= 0)
         while (Lerping <= 1)
         {
             Debug.Log("Fixing Camera!");
             //Camera.transform.position.Set(Camera.transform.position.x, 0f, Camera.transform.position.z);
-            Camera.transform.localPosition = Vector3.Lerp(StartPosition, EndPosition, Lerping);
+            cameraParent.localPosition = Vector3.Lerp(StartPosition, EndPosition, Lerping);
             yield return null;
         }
     }
 
-    public IEnumerator ScreenShake()
+    public void ScreenShake()
     {
-        Vector3 originalPos = Camera.transform.localPosition;
-        float shaketime = 1f;
-        if (shaketime > 0f)
-        {
-            shaketime -= Time.deltaTime;
-            Camera.transform.localPosition = originalPos + Random.insideUnitSphere * 0.7f;
-        }
-        else
-        {
-            shaketime = 0f;
-            Camera.transform.localPosition = originalPos;
-            yield return null;
-        }
-
+        Camera.GetComponent<Animator>().SetBool("shaking",true);
+        print("shaking");
+        shaketimer = 10;
     }
+    
 
     IEnumerator CameraPositionRecalibration()
     {
-        Vector3 StartPosition = Camera.transform.localPosition;
+        Vector3 StartPosition = cameraParent.localPosition;
         //Vector3 EndPosition = new Vector3(Camera.transform.localPosition.x, 0f, -10);
         Vector3 EndPosition = player.transform.position + offset;
         //while (Camera.transform.position.y <= 0)
@@ -146,14 +154,18 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Fixing Camera!");
             //Camera.transform.position.Set(Camera.transform.position.x, 0f, Camera.transform.position.z);
-            Camera.transform.localPosition = Vector3.Lerp(StartPosition, EndPosition, Lerping);
+            cameraParent.localPosition = Vector3.Lerp(StartPosition, EndPosition, Lerping);
             yield return null;
         }
     }
 
     void InstantiateEnemy()
     {
-        Instantiator1.GetComponent<InstantiatorManager>().MakeEnemy();
+        if(instantiatecount<3)
+        {
+            instantiatecount++;
+            Instantiator1.GetComponent<InstantiatorManager>().MakeEnemy();
+        }
     }
 
     void CheckInCombat()
@@ -176,5 +188,27 @@ public class GameManager : MonoBehaviour
         {
             inCombat = true;
         }
+    }
+
+    public void GameOver()
+    {
+        gameoverpanel.SetTrigger("fadein");
+    }
+
+    public void CheckWin()
+    {
+        if (enemiesdefeated == 10)
+            winpanel.SetTrigger("fadein");
+        
+    }
+    
+    public void Restart()
+    {
+        SceneManager.LoadScene("PlayScene");
+    }
+
+    public void TitleScreen()
+    {
+        SceneManager.LoadScene("StartScreen");
     }
 }

@@ -14,7 +14,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - TopPanel
   - 
   - 
   - 
@@ -44,4 +44,7 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 1537709163
+    locked: 0
+  - name: TopPanel
+    uniqueID: 2270515447
     locked: 0

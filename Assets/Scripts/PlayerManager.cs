@@ -16,14 +16,18 @@ public class PlayerManager : MonoBehaviour
     public int currentHp;
     public TMP_Text hpCount;
     public int hitCount=0;
+    public Animator cooldownicon;
 
     private int punchcombo = 0;
     private int kickcombo=0;
     private bool canMove;
+    private bool blocking = false;
 
     private bool canhit = true;
     private float hitStunTimer;
     public float hitStunMax;
+    private float cooldowntime=0;
+    private int comboCount=0;
 
     private Animator PlayerAnim;
 
@@ -47,13 +51,28 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        hitStunTimer--;
+     //testing
+     if (Input.GetKeyDown(KeyCode.Space))
+     {
+         currentHp = 0;
+         CheckLife();
+     }
+
+     hitStunTimer--;
         if (hitStunTimer <= 0)
         {
             PlayerAnim.SetBool("GotHit",false);
+            PlayerAnim.SetBool("KnockedDown",false);
             playericon.sprite = iconnormal;
         }
-        
+
+        cooldowntime--;
+        if (cooldowntime <= 0)
+        {
+            canhit = true;
+            cooldownicon.SetBool("active",true);
+        }
+   
         if (Input.GetKey(KeyCode.LeftArrow) && canMove)
         {
             if (!CM.SR.flipX)
@@ -87,6 +106,16 @@ public class PlayerManager : MonoBehaviour
         {
             PlayerAnim.SetBool("Walking",false);
         }
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            PlayerAnim.SetBool("Block", true);
+            PlayerAnim.SetBool("GotHit",false);
+            canMove = false;
+            blocking = true;
+        }
+        else
+            PlayerAnim.SetBool("Block", false);
         //show attack
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -111,6 +140,17 @@ public class PlayerManager : MonoBehaviour
 
     private void StartCombo()
     {
+        print(comboCount);
+        if(comboCount<4)
+            comboCount++;
+        if (comboCount == 4)
+        {
+            canhit = false;
+            cooldowntime = 70;
+            cooldownicon.SetBool("active",false);
+            comboCount = 0;
+        }
+        
         if (canhit && Input.GetKeyDown(KeyCode.Z))
         {
             punchcombo++;
@@ -130,7 +170,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void CheckCombo()
     {
-        canhit = false;
+        //canhit = false;
         
         if (PlayerAnim.GetCurrentAnimatorStateInfo(0).IsName("player_punch1") && punchcombo == 1)
         {
@@ -230,21 +270,26 @@ public class PlayerManager : MonoBehaviour
 
     public void GetHit(AttackScript hitBy)
     {
+        CheckLife();
         print("ow");
         Debug.Log(hitBy.name + " " + hitBy.damage);
         GetComponent<CharacterManager>().life -= hitBy.damage;
-        currentHp-=hitBy.damage;
+        if (blocking)
+            currentHp -= hitBy.damage - 2;
+        else
+            currentHp-=hitBy.damage;
         hpCount.text = currentHp.ToString();
         playericon.sprite = iconhit;
         hitStunTimer = hitStunMax;
-        PlayerAnim.SetBool("GotHit",true);
+        if (!blocking)
+            PlayerAnim.SetBool("GotHit",true);
         AudioManager.instance.PlayClip("punched");
         if (hitCount < 3)
         {
             PlayerAnim.SetBool("GotHit", true);
             hitCount++;
         }
-        else
+        else if (hitCount ==3)
         {
             PlayerAnim.SetBool("GotHit", false);
             PlayerAnim.SetBool("KnockedDown", true);
@@ -254,7 +299,14 @@ public class PlayerManager : MonoBehaviour
 
     private void CheckLife()
     {
-        
+        if (currentHp<= 0)
+        {
+            canMove = false;
+            PlayerAnim.SetTrigger("Dead");
+            PlayerAnim.SetBool("KnockedDown", false);
+            PlayerAnim.SetBool("GotHit", false);
+            GameManager.instance.GameOver();
+        }
     }
     
 }

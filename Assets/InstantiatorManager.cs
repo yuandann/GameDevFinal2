@@ -5,7 +5,7 @@ using UnityEngine;
 public class InstantiatorManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject EnemyPrefab;
+    private GameObject[] EnemyPrefab;
     [SerializeField]
     private int numbers;
     [SerializeField]
@@ -19,11 +19,7 @@ public class InstantiatorManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Tester, will delete later
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            MakeEnemy();
-        }
+     
     }
 
     public void MakeEnemy()
@@ -35,7 +31,8 @@ public class InstantiatorManager : MonoBehaviour
     {
         for (int i = 0; i < numbers; i++)
         {
-            Object.Instantiate(EnemyPrefab, transform.position, transform.rotation);
+            var randomenemy = Random.Range(0, EnemyPrefab.Length);
+            Object.Instantiate(EnemyPrefab[randomenemy], transform.position, transform.rotation);
             yield return new WaitForSeconds(time);
         }
     }
