@@ -9,6 +9,7 @@ public class CharacterManager : MonoBehaviour
     public SpriteRenderer SR;
     public Transform shadow;
     public GameObject hitfx;
+    private Animator thisanim;
     
     //[SerializeField]
     //public GameObject move_area;
@@ -21,6 +22,7 @@ public class CharacterManager : MonoBehaviour
     {
         SR = GetComponent<SpriteRenderer>();
         shadow = transform.Find("shadow").GetComponent<Transform>();
+        thisanim = GetComponent<Animator>();
 
         //ma = move_area.GetComponent<RectTransform>();
     }
@@ -46,10 +48,18 @@ public class CharacterManager : MonoBehaviour
     }
     public void Checklife()
     {
+        print(life);
         Debug.Log(this.name+" Life: "+ life);
         if (life <= 0)
         {
-            Object.Destroy(this.gameObject);
+            thisanim.SetBool("Dead",true);
         }
+        else
+            thisanim.SetBool("Dead",false);
+    }
+
+    public void DestroyThis()
+    {
+        Object.Destroy(this.gameObject);
     }
 }

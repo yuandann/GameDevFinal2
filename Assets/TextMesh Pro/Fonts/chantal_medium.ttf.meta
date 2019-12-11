@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9a8450edbfa4446148ec9e129c1086bc
+guid: c5059a53db63c474ca978eb8ce0d0309
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: m6x11
+  fontName: Chantal Medium
   fontNames:
-  - m6x11
+  - Chantal Medium
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

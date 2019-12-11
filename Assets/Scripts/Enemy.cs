@@ -284,7 +284,6 @@ public class Enemy : MonoBehaviour
                 AudioManager.instance.PlayClip("kicked");
                 Debug.Log("Enemy hit by kick");
             }
-            Debug.Log(punched);
             currentHP -= hitBy.damage;
             var particlepos = new Vector2(transform.position.x-1.2f,transform.position.y +3);
             var hitfxclone = Instantiate(hitfx, particlepos, Quaternion.identity);
@@ -292,4 +291,6 @@ public class Enemy : MonoBehaviour
             EnterState(EnemyState.HitStun);
             Destroy(hitfxclone, 1f);
         }
+        
+        
 }
