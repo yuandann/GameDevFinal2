@@ -25,6 +25,8 @@ public class ScreenManager : MonoBehaviour
          SceneManager.LoadScene("IntroScene");
         else if (currentScene == SceneManager.GetSceneByBuildIndex(1))
             SceneManager.LoadScene("PlayScene");
+        else if (currentScene == SceneManager.GetSceneByBuildIndex(2))
+            SceneManager.LoadScene("EndCutscene");
     }
 
 

@@ -299,6 +299,7 @@ public class Enemy : MonoBehaviour
             {
                 EnterState(EnemyState.Dying);
                 GameManager.instance.enemiesdefeated++;
+                GameManager.instance.CheckWin();
             }
         }
         

@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public GameObject Instantiator2;
     public GameObject Detector;
     public Animator gameoverpanel;
+    public Animator winpanel;
 
     public GameObject[] EnemyList;
 
@@ -55,6 +56,8 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+//        if(Input.GetKeyDown(KeyCode.Space))
+//            winpanel.SetTrigger("fadein");
         shaketimer--;
         if (shaketimer <= 0)
         {
@@ -194,6 +197,8 @@ public class GameManager : MonoBehaviour
 
     public void CheckWin()
     {
+        if (enemiesdefeated == 10)
+            winpanel.SetTrigger("fadein");
         
     }
     

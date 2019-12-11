@@ -21,6 +21,7 @@ public class PlayerManager : MonoBehaviour
     private int punchcombo = 0;
     private int kickcombo=0;
     private bool canMove;
+    private bool blocking = false;
 
     private bool canhit = true;
     private float hitStunTimer;
@@ -50,10 +51,14 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-     
-        CheckLife();
-        
-        hitStunTimer--;
+     //testing
+     if (Input.GetKeyDown(KeyCode.Space))
+     {
+         currentHp = 0;
+         CheckLife();
+     }
+
+     hitStunTimer--;
         if (hitStunTimer <= 0)
         {
             PlayerAnim.SetBool("GotHit",false);
@@ -101,6 +106,16 @@ public class PlayerManager : MonoBehaviour
         {
             PlayerAnim.SetBool("Walking",false);
         }
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            PlayerAnim.SetBool("Block", true);
+            PlayerAnim.SetBool("GotHit",false);
+            canMove = false;
+            blocking = true;
+        }
+        else
+            PlayerAnim.SetBool("Block", false);
         //show attack
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -126,9 +141,9 @@ public class PlayerManager : MonoBehaviour
     private void StartCombo()
     {
         print(comboCount);
-        if(comboCount<3)
+        if(comboCount<4)
             comboCount++;
-        if (comboCount == 3)
+        if (comboCount == 4)
         {
             canhit = false;
             cooldowntime = 70;
@@ -259,11 +274,15 @@ public class PlayerManager : MonoBehaviour
         print("ow");
         Debug.Log(hitBy.name + " " + hitBy.damage);
         GetComponent<CharacterManager>().life -= hitBy.damage;
-        currentHp-=hitBy.damage;
+        if (blocking)
+            currentHp -= hitBy.damage - 2;
+        else
+            currentHp-=hitBy.damage;
         hpCount.text = currentHp.ToString();
         playericon.sprite = iconhit;
         hitStunTimer = hitStunMax;
-        PlayerAnim.SetBool("GotHit",true);
+        if (!blocking)
+            PlayerAnim.SetBool("GotHit",true);
         AudioManager.instance.PlayClip("punched");
         if (hitCount < 3)
         {

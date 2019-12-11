@@ -19,11 +19,7 @@ public class InstantiatorManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Tester, will delete later
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            MakeEnemy();
-        }
+     
     }
 
     public void MakeEnemy()
